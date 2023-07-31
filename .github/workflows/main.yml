@@ -20,10 +20,10 @@ jobs:
         node-version: '14'
 
     - name: Install dependencies
-      run: npm install
+      run: yarn install
 
     - name: Lint with ESLint
-      run: npm run lint
+      run: yarn run lint
 
     - name: Run tests
-      run: npm test
+      run: yarn test
