@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Tests
 
 on:
   pull_request:
@@ -21,9 +21,6 @@ jobs:
 
     - name: Install dependencies
       run: yarn install
-
-    - name: Lint with ESLint
-      run: yarn run lint
 
     - name: Run tests
       run: yarn test
