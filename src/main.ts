@@ -15,4 +15,5 @@ async function bootstrap() {
   const port = app.get(ConfigService).get<number>('port');
   await app.listen(port);
 }
+
 bootstrap();

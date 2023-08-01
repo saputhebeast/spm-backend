@@ -5,8 +5,9 @@ import { EditUserDto } from './dto';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
   private readonly logger = new Logger(UserService.name);
+
+  constructor(private prisma: PrismaService) {}
 
   async editUser(userId: number, data: EditUserDto) {
     this.logger.log('editUser: execution started');
@@ -24,6 +25,21 @@ export class UserService {
     }
 
     delete user.hash;
+    delete user.createdAt;
+    delete user.updatedAt;
+
+    return user;
+  }
+
+  async getMe(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    delete user.hash;
+
     return user;
   }
 }
