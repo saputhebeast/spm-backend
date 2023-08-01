@@ -8,9 +8,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
-  const port = app.get(ConfigService).get<number>('port');
   ConfigureSwagger(app);
 
+  app.setGlobalPrefix('api');
+
+  const port = app.get(ConfigService).get<number>('port');
   await app.listen(port);
 }
 bootstrap();
