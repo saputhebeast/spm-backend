@@ -3,20 +3,16 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
-import * as dotenv from 'dotenv';
 import { ErrorMiddleware } from './common/middleware';
 import { EnvironmentConfiguration } from './config';
 import { validationSchema } from './config/validation';
 import { HealthModule } from './health/health.module';
 
-dotenv.config();
-const currentEnv = process.env.NODE_ENV || 'development';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `src/config/env/${currentEnv}.env`,
+      envFilePath: `.env`,
       load: [EnvironmentConfiguration],
       validationSchema,
     }),
