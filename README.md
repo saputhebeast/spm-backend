@@ -50,3 +50,10 @@ $ docker-compose up -d
 ```bash
 http://localhost:5005/api
 ```
+
+## Docker
+
+```bash
+build -> docker build -t nestjs-backend .
+run -> docker run -p 5005:5005 nestjs-backend
+```
