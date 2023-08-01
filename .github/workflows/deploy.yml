@@ -36,4 +36,5 @@ jobs:
 
       - name: Deploy to Heroku
         run: |
-          git push https://git.heroku.com/nest-sample-api.git HEAD:main
+          git remote add heroku https://git.heroku.com/nest-sample-api.git
+          git push -f heroku HEAD:main
