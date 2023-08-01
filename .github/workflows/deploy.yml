@@ -1,41 +1,17 @@
-name: Deploy to Heroku
+name: Deploy
 
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Use Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.14 # This is the action
         with:
-          node-version: 16
-
-      - name: Install Heroku CLI
-        run: curl https://cli-assets.heroku.com/install.sh | sh
-
-      - name: Log in to Heroku
-        run: heroku login -i
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Generate Prisma client
-        run: npx prisma generate
-
-      - name: Apply Prisma migrations
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npx prisma migrate deploy
-
-      - name: Add Heroku remote
-        run: git remote add heroku https://git.heroku.com/nest-sample-api.git
-
-      - name: Push to Heroku
-        run: git push heroku HEAD:main
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}} #Must be unique in Heroku
+          heroku_email: ${{secrets.HEROKU_APP_EMAIL}}
