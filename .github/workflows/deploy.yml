@@ -34,8 +34,8 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma migrate deploy
 
-      - name: Deploy to Heroku
-        run: heroku git:remote -a nest-sample-api
+      - name: Add Heroku remote
+        run: git remote add heroku https://git.heroku.com/nest-sample-api.git
 
       - name: Push to Heroku
         run: git push heroku HEAD:main
