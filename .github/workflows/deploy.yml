@@ -1,4 +1,4 @@
-name: Deploy to Heroku
+name: Deploy Docker Image to Heroku
 
 on:
   push:
@@ -12,28 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
+      - name: Log in to Heroku Container Registry
+        run: echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
 
-      - name: Install Heroku CLI
-        run: curl https://cli-assets.heroku.com/install.sh | sh
+      - name: Build and Push Docker image to Heroku
+        run: |
+          docker build -t registry.heroku.com/nest-sample-api/web .
+          docker push registry.heroku.com/nest-sample-api/web
 
-      - name: Log in to Heroku
-        run: heroku login -i
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Generate Prisma client
-        run: npx prisma generate
-
-      - name: Apply Prisma migrations
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npx prisma migrate deploy
-
-      - name: Deploy to Heroku
-        run:
-          git push heroku main
+      - name: Deploy Docker image to Heroku
+        run: heroku container:release -a nest-sample-api web
