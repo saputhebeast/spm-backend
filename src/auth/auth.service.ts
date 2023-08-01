@@ -1,33 +1,31 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
 import { Prisma, Role } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { UserRepository } from '../user/user.repository';
+import { AuthSignDto } from './dto/auth.sign.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
+    private userRepository: UserRepository,
   ) {}
 
   async signup(dto: AuthDto) {
     const hash = await argon.hash(dto.password);
     try {
-      const user = await this.prisma.user.create({
-        data: {
-          email: dto.email,
-          hash,
-          role: dto.role,
-        },
+      const user = await this.userRepository.createUser({
+        email: dto.email,
+        hash,
+        role: dto.role,
       });
 
-      return this.signToken(user.id, user.email);
+      return this.signToken(user.id, user.email, user.role);
     } catch (error) {
-      console.log(error);
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === 'P2002'
@@ -40,21 +38,19 @@ export class AuthService {
     }
   }
 
-  async signToken(userId: number, email: string) {
-    const payload = { sub: userId, email };
+  async signToken(userId: number, email: string, role: Role) {
+    const payload = { sub: userId, email, role };
     const token = await this.jwt.signAsync(payload, {
-      expiresIn: '15m',
-      secret: this.config.get('JWT_SECRET'),
+      expiresIn: this.config.get('jwt.expiresIn'),
+      secret: this.config.get('jwt.secret'),
     });
     return {
       access_token: token,
     };
   }
 
-  async signin(dto: AuthDto) {
-    const user = await this.prisma.user.findUnique({
-      where: { email: dto.email },
-    });
+  async signin(dto: AuthSignDto) {
+    const user = await this.userRepository.findUserByEmail(dto.email);
 
     if (!user) {
       throw new ForbiddenException('Credentials incorrect');
@@ -66,6 +62,6 @@ export class AuthService {
       throw new ForbiddenException('Credentials incorrect');
     }
 
-    return this.signToken(user.id, user.email);
+    return this.signToken(user.id, user.email, user.role);
   }
 }
