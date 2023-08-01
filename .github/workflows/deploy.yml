@@ -17,6 +17,12 @@ jobs:
         with:
           node-version: 16
 
+      - name: Install Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
+
+      - name: Log in to Heroku
+        run: heroku login -i
+
       - name: Install dependencies
         run: npm install
 
@@ -29,8 +35,5 @@ jobs:
         run: npx prisma migrate deploy
 
       - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.14
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_APP_EMAIL }}
+        run: |
+          git push https://git.heroku.com/nest-sample-api.git HEAD:main
