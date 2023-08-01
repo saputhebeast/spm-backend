@@ -2,23 +2,20 @@ import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from '@prisma/client';
 import { EditUserDto } from './dto';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private userRepository: UserRepository,
+  ) {}
 
   async editUser(userId: number, data: EditUserDto) {
     this.logger.log('editUser: execution started');
-    const user: User = await this.prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        ...data,
-      },
-    });
+    const user: User = await this.userRepository.updateUserById(userId, data);
 
     if (!user) {
       throw new ForbiddenException('User not found');
@@ -32,11 +29,7 @@ export class UserService {
   }
 
   async getMe(userId: number) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
+    const user = await this.userRepository.findUserById(userId);
 
     delete user.hash;
 
