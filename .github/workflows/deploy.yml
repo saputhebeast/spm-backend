@@ -35,6 +35,5 @@ jobs:
         run: npx prisma migrate deploy
 
       - name: Deploy to Heroku
-        run: |
-          git remote add heroku https://git.heroku.com/nest-sample-api.git
+        run:
           git push -f heroku HEAD:main
