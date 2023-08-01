@@ -29,9 +29,7 @@ export class AuthService {
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === 'P2002'
       ) {
-        throw new ForbiddenException(
-          'Email already exists. Please choose a different email.',
-        );
+        throw new ForbiddenException('Email already exists in the system.');
       }
       throw new Error('Something wrong went with the server');
     }
@@ -52,13 +50,13 @@ export class AuthService {
     const user = await this.userRepository.findUserByEmail(dto.email);
 
     if (!user) {
-      throw new ForbiddenException('Credentials incorrect');
+      throw new ForbiddenException('Invalid login credentials');
     }
 
     const passwordMatch = await argon.verify(user.hash, dto.password);
 
     if (!passwordMatch) {
-      throw new ForbiddenException('Credentials incorrect');
+      throw new ForbiddenException('Invalid login credentials');
     }
 
     return this.signToken(user.id, user.email, user.role);
