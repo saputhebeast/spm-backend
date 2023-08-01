@@ -24,7 +24,7 @@ model User {
 }
 
 enum Role {
-    USER
-    MANAGER
-    SUPER_ADMIN
+  USER
+  MANAGER
+  SUPER_ADMIN
 }
