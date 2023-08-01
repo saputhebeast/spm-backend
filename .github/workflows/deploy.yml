@@ -25,6 +25,8 @@ jobs:
 
       - name: Apply Prisma migrations
         run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Deploy to Heroku
         env:
