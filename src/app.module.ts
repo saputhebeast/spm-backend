@@ -7,6 +7,7 @@ import * as dotenv from 'dotenv';
 import { ErrorMiddleware } from './common/middleware';
 import { EnvironmentConfiguration } from './config';
 import { validationSchema } from './config/validation';
+import { HealthModule } from './health/health.module';
 
 dotenv.config();
 const currentEnv = process.env.NODE_ENV || 'development';
@@ -22,6 +23,7 @@ const currentEnv = process.env.NODE_ENV || 'development';
     AuthModule,
     UserModule,
     PrismaModule,
+    HealthModule,
   ],
 })
 export class AppModule implements NestModule {
