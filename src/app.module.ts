@@ -7,6 +7,7 @@ import { ErrorMiddleware } from './common/middleware';
 import { EnvironmentConfiguration } from './config';
 import { validationSchema } from './config/validation';
 import { HealthModule } from './health/health.module';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { HealthModule } from './health/health.module';
     UserModule,
     PrismaModule,
     HealthModule,
+    StorageModule,
   ],
 })
 export class AppModule implements NestModule {
