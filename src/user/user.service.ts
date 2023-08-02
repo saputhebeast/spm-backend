@@ -29,6 +29,8 @@ export class UserService {
   }
 
   async getMe(userId: number) {
+    this.logger.log('getMe: execution started');
+
     const user = await this.userRepository.findUserById(userId);
 
     delete user.hash;
