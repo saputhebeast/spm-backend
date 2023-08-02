@@ -1,5 +1,4 @@
 import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { User } from '@prisma/client';
 import { EditUserDto } from './dto';
 import { UserRepository } from './user.repository';
@@ -8,10 +7,7 @@ import { UserRepository } from './user.repository';
 export class UserService {
   private readonly logger = new Logger(UserService.name);
 
-  constructor(
-    private prisma: PrismaService,
-    private userRepository: UserRepository,
-  ) {}
+  constructor(private userRepository: UserRepository) {}
 
   async editUser(userId: number, data: EditUserDto) {
     this.logger.log('editUser: execution started');
