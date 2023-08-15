@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PackageRepository } from './package.repository';
-import { PackageCreateDto, PackageDto } from './dto';
+import { PackageCreateDto } from './dto';
 
 @Injectable()
 export class PackageService {
