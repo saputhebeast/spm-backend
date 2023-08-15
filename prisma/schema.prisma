@@ -24,11 +24,12 @@ model User {
 }
 
 model Package {
-  id     Int     @id @default(autoincrement())
-  name   String  @unique
-  period Int
-  price  Float
-  image  String?
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  period      Int
+  price       Float
+  description String?
+  image       String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
