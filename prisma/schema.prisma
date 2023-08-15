@@ -23,6 +23,19 @@ model User {
   @@map("user")
 }
 
+model Package {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  period Int
+  price  Float
+  image  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("package")
+}
+
 enum Role {
   USER
   MANAGER
