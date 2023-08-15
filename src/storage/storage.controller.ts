@@ -4,11 +4,14 @@ import {
   Post,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { StorageService } from './storage.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtGuard } from '../auth/guard';
 
+@UseGuards(JwtGuard)
 @Controller('s3')
 export class StorageController {
   constructor(private storageService: StorageService) {}
