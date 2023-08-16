@@ -1,6 +1,14 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthDto, AuthSignDto } from './dto';
+import { AuthDto, AuthSignDto, TokenDto } from './dto';
+import { makeResponse } from '../common/util';
 
 @Controller('auth')
 export class AuthController {
@@ -8,13 +16,25 @@ export class AuthController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
-  signup(@Body() dto: AuthDto) {
-    return this.authService.signup(dto);
+  async signup(@Body() dto: AuthDto, @Res() res: Response): Promise<void> {
+    const data: TokenDto = await this.authService.signup(dto);
+    return makeResponse({
+      res,
+      status: HttpStatus.CREATED,
+      data,
+      message: 'User created successfully',
+    });
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('signin')
-  signin(@Body() dto: AuthSignDto) {
-    return this.authService.signin(dto);
+  async signin(@Body() dto: AuthSignDto, @Res() res: Response): Promise<void> {
+    const data: TokenDto = await this.authService.signin(dto);
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'User logged in successfully',
+    });
   }
 }

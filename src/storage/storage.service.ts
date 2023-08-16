@@ -1,18 +1,23 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { StorageRepository } from './storage.repository';
 import {
   GetObjectCommand,
+  HeadObjectCommand,
   ListObjectsV2Command,
+  ListObjectsV2CommandOutput,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { ConfigService } from '@nestjs/config';
+import { S3Dto } from './dto';
+import { mapUrlToS3Dto } from '../common/mapper';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class StorageService {
   private readonly logger: Logger = new Logger(StorageService.name);
-  private readonly s3Client = new S3Client({
+  private readonly s3Client: S3Client = new S3Client({
     region: this.config.getOrThrow('aws.region'),
   });
 
@@ -21,67 +26,113 @@ export class StorageService {
     private storageRepository: StorageRepository,
   ) {}
 
-  async uploadFile(fileName: string, file: Buffer) {
-    this.logger.log('uploadFile: execution started');
+  async uploadFile(
+    userId: number,
+    fileName: string,
+    file: Buffer,
+  ): Promise<S3Dto> {
+    this.logger.log(`uploadFile: execution started by user- ${userId}`);
 
     if (!file) {
       throw new Error('Please upload a file.');
     }
 
-    const status = await this.s3Client.send(
-      new PutObjectCommand({
-        Bucket: this.config.get('aws.bucketName'),
-        Key: fileName,
-        Body: file,
-      }),
-    );
-    return status;
+    const fileExtension: string = fileName.split('.').pop();
+    if (!fileExtension) {
+      throw new Error('Invalid file name.');
+    }
+
+    const newFileName = `${Date.now()}-${uuidv4()}.${fileExtension}`;
+
+    await this.s3Client
+      .send(
+        new PutObjectCommand({
+          Bucket: this.config.get('aws.bucketName'),
+          Key: newFileName,
+          Body: file,
+        }),
+      )
+      .then((): void => {
+        fileName = newFileName;
+      })
+      .catch((): void => {
+        throw new Error('Error uploading the file.');
+      });
+
+    return this.mapStringToS3Dto(fileName);
   }
 
-  async getImage(fileName: string) {
-    this.logger.log('getImage: execution started');
+  async getImage(userId: number, fileName: string): Promise<S3Dto> {
+    this.logger.log(`getImage: execution started by user- ${userId}`);
 
-    const url = await this.generatePresignedUrl(fileName);
+    const url: string = await this.generatePresignedUrl(fileName);
     if (!url) {
       throw new Error('No image found for the given file name.');
     }
-    return url;
+
+    return this.mapStringToS3Dto(url);
   }
 
-  async getImagesFromFolder(folderName: string) {
-    this.logger.log('getImagesFromFolder: execution started');
+  async getImagesFromFolder(
+    userId: number,
+    folderName: string,
+  ): Promise<{ urls: S3Dto[] }> {
+    this.logger.log(
+      `getImagesFromFolder: execution started by user- ${userId}`,
+    );
 
-    const command = new ListObjectsV2Command({
+    const command: ListObjectsV2Command = new ListObjectsV2Command({
       Bucket: this.config.get('aws.bucketName'),
       Prefix: folderName,
     });
-    const data = await this.s3Client.send(command);
+    const data: ListObjectsV2CommandOutput = await this.s3Client.send(command);
 
     if (!data || !data.Contents) {
       throw new Error('No images found in the specified folder.');
     }
 
-    const keys = data.Contents.map(async (object) => {
-      const key = object.Key;
-      const url = await this.generatePresignedUrl(key);
-      return { key, url };
-    });
+    const urls = await Promise.all(
+      data.Contents.map(async (object) => {
+        const key = object.Key;
+        const url = await this.generatePresignedUrl(key);
+        return { url };
+      }),
+    );
 
-    return Promise.all(keys).then((results) => results.slice(1));
+    return {
+      urls: urls.map((item) => this.mapStringToS3Dto(item.url)),
+    };
   }
 
-  private async generatePresignedUrl(key: string) {
+  private mapStringToS3Dto(url: string): S3Dto {
+    return mapUrlToS3Dto(url);
+  }
+
+  private async generatePresignedUrl(key: string): Promise<string> {
     this.logger.log('generatePresignedUrl: execution started');
 
-    const command = new GetObjectCommand({
+    const headCommand: HeadObjectCommand = new HeadObjectCommand({
       Bucket: this.config.get('aws.bucketName'),
       Key: key,
     });
 
-    const url = await getSignedUrl(this.s3Client, command, {
-      expiresIn: 60 * 60 * 24 * 7,
-    });
+    return this.s3Client
+      .send(headCommand)
+      .then(() => {
+        const command: GetObjectCommand = new GetObjectCommand({
+          Bucket: this.config.get('aws.bucketName'),
+          Key: key,
+        });
 
-    return url;
+        return getSignedUrl(this.s3Client, command, {
+          expiresIn: 60 * 60 * 24 * 7,
+        });
+      })
+      .catch((error) => {
+        if (error.name === 'NotFound') {
+          throw new NotFoundException('File not found');
+        }
+        throw new Error('Something went wrong');
+      });
   }
 }

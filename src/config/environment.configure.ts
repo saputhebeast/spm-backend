@@ -1,5 +1,5 @@
 export const EnvironmentConfiguration = () => {
-  const config = {
+  return {
     NODE_ENV: process.env.NODE_ENV,
     port: parseInt(process.env.PORT, 10) || 3001,
     jwt: {
@@ -14,5 +14,4 @@ export const EnvironmentConfiguration = () => {
       bucketName: process.env.AWS_BUCKET_NAME,
     },
   };
-  return config;
 };
