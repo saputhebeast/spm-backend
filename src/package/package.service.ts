@@ -15,10 +15,6 @@ export class PackageService {
 
   constructor(private packageRepository: PackageRepository) {}
 
-  private mapPackageToDto(pkg: Package): PackageDto {
-    return mapPackageToPackageDto(pkg);
-  }
-
   async createPackage(
     userId: number,
     packageDto: PackageCreateDto,
@@ -99,5 +95,9 @@ export class PackageService {
     }
 
     return this.mapPackageToDto(deletePackage);
+  }
+
+  private mapPackageToDto(pkg: Package): PackageDto {
+    return mapPackageToPackageDto(pkg);
   }
 }
