@@ -42,6 +42,7 @@ export class PackageController {
   }
 
   @Patch(':id')
+  @UseGuards(ManagerSuperAdminGuard)
   updatePackage(
     @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) packageId: number,
@@ -51,6 +52,7 @@ export class PackageController {
   }
 
   @Delete(':id')
+  @UseGuards(ManagerSuperAdminGuard)
   deletePackage(
     @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) packageId: number,
