@@ -1,3 +1,5 @@
+import { PackageDto } from './package.dto';
+
 export class PackagesDto {
-  packages: PackagesDto[];
+  packages: PackageDto[];
 }

@@ -5,60 +5,75 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PackageRepository } from './package.repository';
-import { PackageCreateDto } from './dto';
+import { PackageCreateDto, PackageDto } from './dto';
+import { mapPackageToPackageDto } from '../common/mapper';
+import { Package } from '@prisma/client';
 
 @Injectable()
 export class PackageService {
-  private readonly logger = new Logger(PackageService.name);
+  private readonly logger: Logger = new Logger(PackageService.name);
 
   constructor(private packageRepository: PackageRepository) {}
 
-  async createPackage(userId: number, packageDto: PackageCreateDto) {
+  private mapPackageToDto(pkg: Package): PackageDto {
+    return mapPackageToPackageDto(pkg);
+  }
+
+  async createPackage(
+    userId: number,
+    packageDto: PackageCreateDto,
+  ): Promise<PackageDto> {
     this.logger.log(`createPackage: execution started by user- ${userId}`);
 
-    const newPackage = await this.packageRepository.savePackage(packageDto);
+    const newPackage: Package = await this.packageRepository.savePackage(
+      packageDto,
+    );
 
     if (!newPackage) {
       throw new InternalServerErrorException('Package not created');
     }
 
-    return newPackage;
+    return this.mapPackageToDto(newPackage);
   }
 
-  async getPackageById(userId: number, packageId: number) {
+  async getPackageById(userId: number, packageId: number): Promise<PackageDto> {
     this.logger.log(`getPackageById: execution started by user- ${userId}`);
 
-    const thePackage = await this.packageRepository.findById(packageId);
+    const thePackage: Package = await this.packageRepository.findById(
+      packageId,
+    );
 
     if (!thePackage) {
       throw new NotFoundException('Package not found');
     }
 
-    return thePackage;
+    return this.mapPackageToDto(thePackage);
   }
 
-  async getAllPackages(userId: number) {
+  async getAllPackages(userId: number): Promise<{ packages: PackageDto[] }> {
     this.logger.log(`getPackageById: execution started by user- ${userId}`);
 
-    const packages = await this.packageRepository.getAllPackages();
+    const packages: Package[] = await this.packageRepository.getAllPackages();
 
     if (!packages || packages.length === 0) {
       throw new NotFoundException('Packages not found');
     }
 
-    return packages;
+    return {
+      packages: packages.map(this.mapPackageToDto),
+    };
   }
 
   async updatePackage(
     userId: number,
     packageId: number,
     updateDto: PackageCreateDto,
-  ) {
+  ): Promise<PackageDto> {
     this.logger.log(`updatePackage: execution started by user- ${userId}`);
 
     await this.getPackageById(userId, packageId);
 
-    const updatedPackage = await this.packageRepository.updatePackage(
+    const updatedPackage: Package = await this.packageRepository.updatePackage(
       packageId,
       updateDto,
     );
@@ -67,20 +82,22 @@ export class PackageService {
       throw new InternalServerErrorException('Unable to update the package');
     }
 
-    return updatedPackage;
+    return this.mapPackageToDto(updatedPackage);
   }
 
-  async deletePackage(userId: number, packageId: number) {
+  async deletePackage(userId: number, packageId: number): Promise<PackageDto> {
     this.logger.log(`deletePackage: execution started by user- ${userId}`);
 
     await this.getPackageById(userId, packageId);
 
-    const deletePackage = await this.packageRepository.deletePackage(packageId);
+    const deletePackage: Package = await this.packageRepository.deletePackage(
+      packageId,
+    );
 
     if (!deletePackage) {
       throw new InternalServerErrorException('Unable to delete the package');
     }
 
-    return deletePackage;
+    return this.mapPackageToDto(deletePackage);
   }
 }

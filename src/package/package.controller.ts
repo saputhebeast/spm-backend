@@ -3,16 +3,19 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { JwtGuard, ManagerSuperAdminGuard } from '../auth/guard';
 import { PackageService } from './package.service';
 import { GetUser } from '../auth/decorator';
-import { PackageCreateDto } from './dto';
+import { PackageCreateDto, PackageDto } from './dto';
+import { makeResponse } from '../common/util';
 
 @UseGuards(JwtGuard)
 @Controller('package')
@@ -21,42 +24,93 @@ export class PackageController {
 
   @Post()
   @UseGuards(ManagerSuperAdminGuard)
-  createPackage(
+  async createPackage(
     @GetUser('id') userId: number,
     @Body() packageDto: PackageCreateDto,
-  ) {
-    return this.packageService.createPackage(userId, packageDto);
+    @Res() res: Response,
+  ): Promise<void> {
+    const data: PackageDto = await this.packageService.createPackage(
+      userId,
+      packageDto,
+    );
+    return makeResponse({
+      res,
+      status: HttpStatus.CREATED,
+      data,
+      message: 'Package created successfully',
+    });
   }
 
   @Get(':id')
-  getPackageById(
+  async getPackageById(
     @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) packageId: number,
-  ) {
-    return this.packageService.getPackageById(userId, packageId);
+    @Res() res: Response,
+  ): Promise<void> {
+    const data: PackageDto = await this.packageService.getPackageById(
+      userId,
+      packageId,
+    );
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Package retrieved successfully',
+    });
   }
 
   @Get()
-  getAllPackages(@GetUser('id') userId: number) {
-    return this.packageService.getAllPackages(userId);
+  async getAllPackages(
+    @GetUser('id') userId: number,
+    @Res() res: Response,
+  ): Promise<void> {
+    const data: { packages: PackageDto[] } =
+      await this.packageService.getAllPackages(userId);
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Packages retrieved successfully',
+    });
   }
 
   @Patch(':id')
   @UseGuards(ManagerSuperAdminGuard)
-  updatePackage(
+  async updatePackage(
     @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) packageId: number,
     @Body() updateDto: PackageCreateDto,
-  ) {
-    return this.packageService.updatePackage(userId, packageId, updateDto);
+    @Res() res: Response,
+  ): Promise<void> {
+    const data: PackageDto = await this.packageService.updatePackage(
+      userId,
+      packageId,
+      updateDto,
+    );
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Package updated successfully',
+    });
   }
 
   @Delete(':id')
   @UseGuards(ManagerSuperAdminGuard)
-  deletePackage(
+  async deletePackage(
     @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) packageId: number,
-  ) {
-    return this.packageService.deletePackage(userId, packageId);
+    @Res() res: Response,
+  ): Promise<void> {
+    const data: PackageDto = await this.packageService.deletePackage(
+      userId,
+      packageId,
+    );
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Package deleted successfully',
+    });
   }
 }
