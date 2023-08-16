@@ -8,19 +8,33 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  hash      String
+  firstName String?
+  lastName  String?
+  role      Role
+  isActive  Boolean @default(true)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  email String @unique
-  hash  String
-
-  firstName String?
-  lastName  String?
-
-  role Role
-
   @@map("user")
+}
+
+model Package {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  period      Int
+  price       Float
+  description String?
+  image       String?
+  isActive    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("package")
 }
 
 enum Role {
