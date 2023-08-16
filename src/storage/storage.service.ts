@@ -11,7 +11,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { ConfigService } from '@nestjs/config';
 import { S3Dto } from './dto';
-import { mapStringToS3Dto } from '../common/mapper/string.s3Dto.mapper';
+import { mapUrlToS3Dto } from '../common/mapper';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -26,8 +26,12 @@ export class StorageService {
     private storageRepository: StorageRepository,
   ) {}
 
-  async uploadFile(fileName: string, file: Buffer): Promise<S3Dto> {
-    this.logger.log('uploadFile: execution started');
+  async uploadFile(
+    userId: number,
+    fileName: string,
+    file: Buffer,
+  ): Promise<S3Dto> {
+    this.logger.log(`uploadFile: execution started by user- ${userId}`);
 
     if (!file) {
       throw new Error('Please upload a file.');
@@ -58,8 +62,8 @@ export class StorageService {
     return this.mapStringToS3Dto(fileName);
   }
 
-  async getImage(fileName: string): Promise<S3Dto> {
-    this.logger.log('getImage: execution started');
+  async getImage(userId: number, fileName: string): Promise<S3Dto> {
+    this.logger.log(`getImage: execution started by user- ${userId}`);
 
     const url: string = await this.generatePresignedUrl(fileName);
     if (!url) {
@@ -69,8 +73,13 @@ export class StorageService {
     return this.mapStringToS3Dto(url);
   }
 
-  async getImagesFromFolder(folderName: string): Promise<{ urls: S3Dto[] }> {
-    this.logger.log('getImagesFromFolder: execution started');
+  async getImagesFromFolder(
+    userId: number,
+    folderName: string,
+  ): Promise<{ urls: S3Dto[] }> {
+    this.logger.log(
+      `getImagesFromFolder: execution started by user- ${userId}`,
+    );
 
     const command: ListObjectsV2Command = new ListObjectsV2Command({
       Bucket: this.config.get('aws.bucketName'),
@@ -96,7 +105,7 @@ export class StorageService {
   }
 
   private mapStringToS3Dto(url: string): S3Dto {
-    return mapStringToS3Dto(url);
+    return mapUrlToS3Dto(url);
   }
 
   private async generatePresignedUrl(key: string): Promise<string> {
