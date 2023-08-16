@@ -1,5 +1,5 @@
 export const makeResponse = ({ res, status, data, message }): void => {
-  const responseData: { data: any; message: string } = { data, message };
+  const responseData: { data: unknown; message: string } = { data, message };
   if (!data) {
     delete responseData.data;
   }

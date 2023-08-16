@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express';
 export class ErrorMiddleware implements NestMiddleware {
   private readonly logger = new Logger(ErrorMiddleware.name);
 
-  use(req: Request, res: Response, next: NextFunction): any {
+  use(req: Request, res: Response, next: NextFunction): void {
     res.on('finish', () => {
       if (res.statusCode >= 400) {
         this.logger.error(

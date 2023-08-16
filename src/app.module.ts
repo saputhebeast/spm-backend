@@ -27,7 +27,7 @@ import { PackageModule } from './package/package.module';
   ],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer): any {
+  configure(consumer: MiddlewareConsumer): void {
     consumer.apply(ErrorMiddleware).forRoutes('*');
   }
 }
