@@ -9,6 +9,7 @@ export function mapPackageToPackageDto(pkg: Package): PackageDto {
     price: pkg.price,
     description: pkg.description,
     image: pkg.image,
+    isActive: pkg.isActive,
     createdAt: pkg.createdAt,
     updatedAt: pkg.updatedAt,
   };
