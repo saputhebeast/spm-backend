@@ -37,6 +37,24 @@ model Package {
   @@map("package")
 }
 
+model Seller {
+  id         Int     @id @default(autoincrement())
+  name       String
+  email      String  @unique
+  line1      String
+  line2      String
+  city       String
+  postalCode String
+  state      String
+  country    String
+  isActive   Boolean @default(true)
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("seller")
+}
+
 enum Role {
   USER
   MANAGER
