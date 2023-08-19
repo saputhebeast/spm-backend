@@ -30,10 +30,6 @@ export class SellerService {
     return this.mapSellerToSellerResponseDto(newSeller);
   }
 
-  private mapSellerToSellerResponseDto(seller: Seller): SellerResponseDto {
-    return mapSellerToSellerResponseDto(seller);
-  }
-
   async getSellerById(
     userId: number,
     sellerId: number,
@@ -101,5 +97,9 @@ export class SellerService {
     }
 
     return this.mapSellerToSellerResponseDto(deletedSeller);
+  }
+
+  private mapSellerToSellerResponseDto(seller: Seller): SellerResponseDto {
+    return mapSellerToSellerResponseDto(seller);
   }
 }
