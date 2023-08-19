@@ -9,6 +9,7 @@ import { validationSchema } from './config/validation';
 import { HealthModule } from './health/health.module';
 import { StorageModule } from './storage/storage.module';
 import { PackageModule } from './package/package.module';
+import { SellerModule } from './seller/seller.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { PackageModule } from './package/package.module';
     HealthModule,
     StorageModule,
     PackageModule,
+    SellerModule,
   ],
 })
 export class AppModule implements NestModule {
