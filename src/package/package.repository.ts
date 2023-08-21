@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { PackageCreateDto, PackageEditDto } from './dto';
-import { Prisma } from '@prisma/client';
+import { Package, Prisma } from '@prisma/client';
 
 @Injectable()
 export class PackageRepository {
   constructor(private prisma: PrismaService) {}
 
-  async savePackage(packageDto: PackageCreateDto) {
+  async savePackage(packageDto: PackageCreateDto): Promise<Package> {
     return this.prisma.package.create({
       data: { ...packageDto },
     });
   }
 
-  async findById(packageId: number) {
+  async findById(packageId: number): Promise<Package> {
     return this.prisma.package.findFirst({
       where: {
         id: packageId,
@@ -22,7 +22,7 @@ export class PackageRepository {
     });
   }
 
-  async getAllPackages() {
+  async getAllPackages(): Promise<Package[]> {
     return this.prisma.package.findMany({
       where: {
         isActive: true,
@@ -30,7 +30,10 @@ export class PackageRepository {
     });
   }
 
-  async updatePackage(packageId: number, updateDto: PackageEditDto) {
+  async updatePackage(
+    packageId: number,
+    updateDto: PackageEditDto,
+  ): Promise<Package> {
     return this.prisma.package.update({
       where: {
         id: packageId,
@@ -41,7 +44,7 @@ export class PackageRepository {
     });
   }
 
-  async deletePackage(packageId: number) {
+  async deletePackage(packageId: number): Promise<Package> {
     return this.prisma.package.update({
       where: {
         id: packageId,
