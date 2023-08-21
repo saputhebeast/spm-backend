@@ -10,6 +10,7 @@ import { HealthModule } from './health/health.module';
 import { StorageModule } from './storage/storage.module';
 import { PackageModule } from './package/package.module';
 import { SellerModule } from './seller/seller.module';
+import { ItemModule } from './item/item.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { SellerModule } from './seller/seller.module';
     StorageModule,
     PackageModule,
     SellerModule,
+    ItemModule,
   ],
 })
 export class AppModule implements NestModule {

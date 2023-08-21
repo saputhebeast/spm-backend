@@ -8,7 +8,6 @@ export class SellerRepository {
   constructor(private prisma: PrismaService) {}
 
   async saveSeller(sellerDto: SellerCreateDto): Promise<Seller> {
-    console.log(sellerDto);
     return this.prisma.seller.create({
       data: { ...sellerDto },
     });
