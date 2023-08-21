@@ -52,11 +52,33 @@ model Seller {
   createAt  DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  items Item[]
+
   @@map("seller")
+}
+
+model Item {
+  id       Int      @id @default(autoincrement())
+  itemName String
+  price    Float
+  category Category
+  quantity Int
+  isActive Boolean  @default(true)
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sellerId Int
+  seller   Seller @relation(fields: [sellerId], references: [id])
 }
 
 enum Role {
   USER
   MANAGER
   SUPER_ADMIN
+}
+
+enum Category {
+  SNEAKERS
+  SOCKS
 }
