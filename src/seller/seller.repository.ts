@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { SellerCreateDto } from './dto';
+import { SellerCreateDto, SellerEditDto } from './dto';
 import { Seller } from '@prisma/client';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class SellerRepository {
 
   async updateSeller(
     sellerId: number,
-    sellerUpdateDto: SellerCreateDto,
+    sellerUpdateDto: SellerEditDto,
   ): Promise<Seller> {
     return this.prisma.seller.update({
       where: {

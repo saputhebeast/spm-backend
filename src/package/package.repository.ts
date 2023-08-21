@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { PackageCreateDto } from './dto';
+import { PackageCreateDto, PackageEditDto } from './dto';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class PackageRepository {
     });
   }
 
-  async updatePackage(packageId: number, updateDto: PackageCreateDto) {
+  async updatePackage(packageId: number, updateDto: PackageEditDto) {
     return this.prisma.package.update({
       where: {
         id: packageId,

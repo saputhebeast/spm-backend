@@ -14,7 +14,7 @@ import {
 import { JwtGuard, ManagerSuperAdminGuard } from '../auth/guard';
 import { PackageService } from './package.service';
 import { GetUser } from '../auth/decorator';
-import { PackageCreateDto, PackageDto } from './dto';
+import { PackageCreateDto, PackageDto, PackageEditDto } from './dto';
 import { makeResponse } from '../common/util';
 
 @UseGuards(JwtGuard)
@@ -79,7 +79,7 @@ export class PackageController {
   async updatePackage(
     @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) packageId: number,
-    @Body() updateDto: PackageCreateDto,
+    @Body() updateDto: PackageEditDto,
     @Res() res: Response,
   ): Promise<void> {
     const data: PackageDto = await this.packageService.updatePackage(
