@@ -15,7 +15,7 @@ import {
 import { SellerService } from './seller.service';
 import { makeResponse } from '../common/util';
 import { GetUser } from '../auth/decorator';
-import { SellerCreateDto, SellerResponseDto } from './dto';
+import { SellerCreateDto, SellerEditDto, SellerResponseDto } from './dto';
 
 @UseGuards(JwtGuard)
 @Controller('seller')
@@ -82,7 +82,7 @@ export class SellerController {
   async updatePackage(
     @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) sellerId: number,
-    @Body() sellerUpdateDto: SellerCreateDto,
+    @Body() sellerUpdateDto: SellerEditDto,
     @Res() res: Response,
   ): Promise<any> {
     const data: SellerResponseDto = await this.sellerService.updateSeller(

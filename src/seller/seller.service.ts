@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { SellerRepository } from './seller.repository';
-import { SellerCreateDto, SellerResponseDto } from './dto';
+import { SellerCreateDto, SellerEditDto, SellerResponseDto } from './dto';
 import { Seller } from '@prisma/client';
 import { mapSellerToSellerResponseDto } from '../common/mapper';
 
@@ -62,7 +62,7 @@ export class SellerService {
   async updateSeller(
     userId: number,
     sellerId: number,
-    sellerUpdateDto: SellerCreateDto,
+    sellerUpdateDto: SellerEditDto,
   ): Promise<SellerResponseDto> {
     this.logger.log(`updateSeller: execution started by user- ${userId}`);
 

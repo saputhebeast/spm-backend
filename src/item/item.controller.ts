@@ -12,44 +12,45 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtGuard, ManagerSuperAdminGuard } from '../auth/guard';
-import { PackageService } from './package.service';
 import { GetUser } from '../auth/decorator';
-import { PackageCreateDto, PackageDto, PackageEditDto } from './dto';
+import { ItemService } from './item.service';
+import { ItemCreateDto, ItemEditDto, ItemResponseDto } from './dto';
 import { makeResponse } from '../common/util';
 
 @UseGuards(JwtGuard)
-@Controller('package')
-export class PackageController {
-  constructor(private packageService: PackageService) {}
+@Controller('item')
+export class ItemController {
+  constructor(private itemService: ItemService) {}
 
   @Post()
   @UseGuards(ManagerSuperAdminGuard)
-  async createPackage(
+  async createItem(
     @GetUser('id') userId: number,
-    @Body() packageDto: PackageCreateDto,
+    @Body() itemDto: ItemCreateDto,
     @Res() res: Response,
   ): Promise<void> {
-    const data: PackageDto = await this.packageService.createPackage(
+    const data: ItemResponseDto = await this.itemService.createItem(
       userId,
-      packageDto,
+      itemDto,
     );
+
     return makeResponse({
       res,
       status: HttpStatus.CREATED,
       data,
-      message: 'Package created successfully',
+      message: 'Item created successfully',
     });
   }
 
   @Get(':id')
   async getPackageById(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) packageId: number,
+    @Param('id', ParseIntPipe) itemId: number,
     @Res() res: Response,
   ): Promise<void> {
-    const data: PackageDto = await this.packageService.getPackageById(
+    const data: ItemResponseDto = await this.itemService.getItem(
       userId,
-      packageId,
+      itemId,
     );
     return makeResponse({
       res,
@@ -60,57 +61,57 @@ export class PackageController {
   }
 
   @Get()
-  async getAllPackages(
+  async getAllItems(
     @GetUser('id') userId: number,
     @Res() res: Response,
   ): Promise<void> {
-    const data: { packages: PackageDto[] } =
-      await this.packageService.getAllPackages(userId);
+    const data: { items: ItemResponseDto[] } =
+      await this.itemService.getAllItems(userId);
     return makeResponse({
       res,
       status: HttpStatus.OK,
       data,
-      message: 'Packages retrieved successfully',
+      message: 'Items retrieved successfully',
     });
   }
 
   @Patch(':id')
   @UseGuards(ManagerSuperAdminGuard)
-  async updatePackage(
+  async updateItem(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) packageId: number,
-    @Body() updateDto: PackageEditDto,
+    @Param('id', ParseIntPipe) itemId: number,
+    @Body() updateDto: ItemEditDto,
     @Res() res: Response,
   ): Promise<void> {
-    const data: PackageDto = await this.packageService.updatePackage(
+    const data: ItemResponseDto = await this.itemService.updateItem(
       userId,
-      packageId,
+      itemId,
       updateDto,
     );
     return makeResponse({
       res,
-      status: HttpStatus.OK,
+      status: HttpStatus.CREATED,
       data,
-      message: 'Package updated successfully',
+      message: 'Item updated successfully',
     });
   }
 
   @Delete(':id')
   @UseGuards(ManagerSuperAdminGuard)
-  async deletePackage(
+  async deleteItem(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) packageId: number,
+    @Param('id', ParseIntPipe) itemId: number,
     @Res() res: Response,
   ): Promise<void> {
-    const data: PackageDto = await this.packageService.deletePackage(
+    const data: ItemResponseDto = await this.itemService.deleteItem(
       userId,
-      packageId,
+      itemId,
     );
     return makeResponse({
       res,
       status: HttpStatus.OK,
       data,
-      message: 'Package deleted successfully',
+      message: 'Item deleted successfully',
     });
   }
 }

@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PackageRepository } from './package.repository';
-import { PackageCreateDto, PackageDto } from './dto';
+import { PackageCreateDto, PackageDto, PackageEditDto } from './dto';
 import { mapPackageToPackageDto } from '../common/mapper';
 import { Package } from '@prisma/client';
 
@@ -63,7 +63,7 @@ export class PackageService {
   async updatePackage(
     userId: number,
     packageId: number,
-    updateDto: PackageCreateDto,
+    updateDto: PackageEditDto,
   ): Promise<PackageDto> {
     this.logger.log(`updatePackage: execution started by user- ${userId}`);
 
