@@ -9,7 +9,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.0.0
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -17,7 +23,7 @@ jobs:
           node-version: '16'
 
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Generate Prisma Client
         run: npx prisma generate
