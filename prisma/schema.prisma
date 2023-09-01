@@ -70,6 +70,8 @@ model Item {
 
   sellerId Int
   seller   Seller @relation(fields: [sellerId], references: [id])
+
+  @@map("item")
 }
 
 enum Role {
