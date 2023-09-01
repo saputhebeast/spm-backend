@@ -15,5 +15,14 @@ export function mapItemToItemSellerResponseDto(
       email: item.seller.email,
     },
     isActive: item.isActive,
+    brand: item.brand,
+    outdoor: item.outdoor,
+    gender: item.gender,
+    age: item.age,
+    size: item.size,
+    material: item.material,
+    tags: item.tags,
+    color: item.color,
+    rating: item.rating,
   };
 }

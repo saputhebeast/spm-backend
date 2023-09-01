@@ -9,4 +9,13 @@ export class ItemSellerDto {
   sellerId: number;
   seller: Seller;
   isActive: boolean;
+  brand: string;
+  outdoor: string;
+  gender: string;
+  age: number;
+  size: string;
+  material: string;
+  tags: string;
+  color: string;
+  rating: number;
 }
