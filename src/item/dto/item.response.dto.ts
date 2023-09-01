@@ -11,5 +11,14 @@ export class ItemResponseDto {
     name: string;
     email: string;
   };
+  brand: string;
+  outdoor: string;
+  gender: string;
+  age: number;
+  size: string;
+  material: string;
+  tags: string;
+  color: string;
+  rating: number;
   isActive: boolean;
 }
