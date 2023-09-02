@@ -22,19 +22,11 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Remove node_modules and dist
-        run: |
-          rm -rf node_modules
-          rm -rf dist
-        continue-on-error: true
-
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Run Prisma Migrations
-        run: |
-          npx prisma migrate deploy
-          npx prisma generate
+      - name: Generate Prisma Client
+        run: npx prisma generate
 
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.14
