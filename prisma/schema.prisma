@@ -19,6 +19,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  payments Payment[]
+
   @@map("user")
 }
 
@@ -83,6 +85,20 @@ model Item {
   @@map("item")
 }
 
+model Payment {
+  id     Int           @id @default(autoincrement())
+  amount Float
+  status PaymentStatus
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("payment")
+}
+
 enum Role {
   USER
   MANAGER
@@ -92,4 +108,9 @@ enum Role {
 enum Category {
   SNEAKERS
   SOCKS
+}
+
+enum PaymentStatus {
+  SUCCESS
+  FAIL
 }
