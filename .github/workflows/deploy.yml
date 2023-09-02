@@ -22,6 +22,12 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Remove node_modules and dist
+        run: |
+          rm -rf node_modules
+          rm -rf dist
+        continue-on-error: true
+
       - name: Install Dependencies
         run: pnpm install
 
