@@ -23,4 +23,34 @@ export class ItemCreateDto {
   @IsNumber()
   @IsNotEmpty()
   sellerId: number;
+
+  @IsString()
+  @IsNotEmpty()
+  brand: string;
+
+  @IsString()
+  @IsNotEmpty()
+  outdoor: string;
+
+  @IsString()
+  gender: string;
+
+  @IsNumber()
+  age: number;
+
+  @IsString()
+  @IsNotEmpty()
+  size: string;
+
+  @IsString()
+  material: string;
+
+  @IsString()
+  tags: string;
+
+  @IsString()
+  color: string;
+
+  @IsNumber()
+  rating: number;
 }

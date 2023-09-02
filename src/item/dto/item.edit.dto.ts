@@ -1,5 +1,5 @@
 import { Category } from '@prisma/client';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class ItemEditDto {
   @IsString()
@@ -20,4 +20,34 @@ export class ItemEditDto {
   @IsNumber()
   @IsOptional()
   sellerId?: number;
+
+  @IsString()
+  @IsNotEmpty()
+  brand: string;
+
+  @IsString()
+  @IsNotEmpty()
+  outdoor: string;
+
+  @IsString()
+  gender: string;
+
+  @IsNumber()
+  age: number;
+
+  @IsString()
+  @IsNotEmpty()
+  size: string;
+
+  @IsString()
+  material: string;
+
+  @IsString()
+  tags: string;
+
+  @IsString()
+  color: string;
+
+  @IsNumber()
+  rating: number;
 }
