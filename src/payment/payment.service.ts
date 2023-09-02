@@ -33,12 +33,6 @@ export class PaymentService {
     return this.mapPaymentToPaymentUserResponseDto(payment);
   }
 
-  private mapPaymentToPaymentUserResponseDto(
-    paymentUserDto: PaymentUserDto,
-  ): PaymentResponseDto {
-    return mapPaymentToPaymentUserResponseDto(paymentUserDto);
-  }
-
   async getPaymentById(
     userId: number,
     paymentId: number,
@@ -87,5 +81,11 @@ export class PaymentService {
     }
 
     return { payments: payments.map(this.mapPaymentToPaymentUserResponseDto) };
+  }
+
+  private mapPaymentToPaymentUserResponseDto(
+    paymentUserDto: PaymentUserDto,
+  ): PaymentResponseDto {
+    return mapPaymentToPaymentUserResponseDto(paymentUserDto);
   }
 }
