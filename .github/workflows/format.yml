@@ -6,42 +6,16 @@ on:
       - development
 
 jobs:
-  format:
+  prettier:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
-          version: 8.0.0
+          ref: ${{ github.head_ref }}
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Prettify code
+        uses: creyD/prettier_action@v4.3
         with:
-          node-version: '16'
-
-      - name: Install Dependencies
-        run: pnpm install
-
-      - name: Format Code with Prettier
-        run: pnpm format-code
-
-      - name: Check for Changes
-        id: git-status
-        run: echo "::set-output name=changes::$(git status --porcelain)"
-
-      - name: Commit and Push Changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          changes=$(echo "$(<${{ steps.git-status.outputs.changes }})")
-          if [ -n "$changes" ]; then
-            git add .
-            git commit -m "Format code with Prettier"
-            git push
-          else
-            echo "No changes to commit."
-          fi
+          prettier_options: --write **/*.{ts}
