@@ -19,7 +19,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  payments Payment[]
+  payments      Payment[]
+  subscriptions Subscription[]
 
   @@map("user")
 }
@@ -35,6 +36,8 @@ model Package {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  subscriptions Subscription[]
 
   @@map("package")
 }
@@ -96,7 +99,28 @@ model Payment {
   userId Int
   user   User @relation(fields: [userId], references: [id])
 
+  subscription Subscription?
+
   @@map("payment")
+}
+
+model Subscription {
+  id        Int                @id @default(autoincrement())
+  startDate DateTime
+  endDate   DateTime
+  status    SubscriptionStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+  paymentId Int     @unique
+  payment   Payment @relation(fields: [paymentId], references: [id])
+  packageId Int
+  package   Package @relation(fields: [packageId], references: [id])
+
+  @@map("subscription")
 }
 
 enum Role {
@@ -113,4 +137,9 @@ enum Category {
 enum PaymentStatus {
   SUCCESS
   FAIL
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
 }
