@@ -13,7 +13,7 @@ import {
 } from './dto';
 import { mapSubscriptionToSubscriptionResponseDto } from '../common/mapper';
 import { ManagerSuperAdminGuard, UserGuard } from '../auth/guard';
-import { SubscriptionStatusUpdateDto } from "./dto";
+import { SubscriptionStatusUpdateDto } from './dto';
 
 @Injectable()
 export class SubscriptionService {
