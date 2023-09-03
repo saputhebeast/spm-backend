@@ -5,3 +5,4 @@ export * from './user.userResponseDto.mapper';
 export * from './seller.sellerResponseDto.mapper';
 export * from './item.itemSellerResponseDto.mapper';
 export * from './payment.paymentUserResponseDto.mapper';
+export * from './subscription.subscriptionResponseDto';
