@@ -26,7 +26,7 @@ jobs:
         run: pnpm install
 
       - name: Generate Prisma Client
-        run: npx prisma generate --force
+        run: pnpm dlx prisma generate --force
 
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.14
