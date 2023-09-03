@@ -6,7 +6,7 @@ import { ItemCreateDto, ItemEditDto, ItemSellerDto } from './dto';
 export class ItemRepository {
   constructor(private prisma: PrismaService) {}
 
-  async saveItem(itemDto: ItemCreateDto): Promise<ItemSellerDto> {
+  async saveItem(itemDto: ItemCreateDto) {
     return this.prisma.item.create({
       data: {
         ...itemDto,
@@ -17,7 +17,7 @@ export class ItemRepository {
     });
   }
 
-  async getItem(itemId: number): Promise<ItemSellerDto> {
+  async getItem(itemId: number) {
     return this.prisma.item.findFirst({
       where: {
         id: itemId,
@@ -29,7 +29,7 @@ export class ItemRepository {
     });
   }
 
-  async getAllItems(): Promise<ItemSellerDto[]> {
+  async getAllItems() {
     return this.prisma.item.findMany({
       where: {
         isActive: true,
@@ -43,7 +43,7 @@ export class ItemRepository {
   async updateItem(
     itemId: number,
     updateDto: ItemEditDto,
-  ): Promise<ItemSellerDto> {
+  ) {
     return this.prisma.item.update({
       where: {
         id: itemId,
@@ -57,7 +57,7 @@ export class ItemRepository {
     });
   }
 
-  async deleteItem(itemId: number): Promise<ItemSellerDto> {
+  async deleteItem(itemId: number) {
     return this.prisma.item.update({
       where: {
         id: itemId,
