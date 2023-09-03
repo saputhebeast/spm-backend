@@ -19,6 +19,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  payments      Payment[]
+  subscriptions Subscription[]
+
   @@map("user")
 }
 
@@ -33,6 +36,8 @@ model Package {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  subscriptions Subscription[]
 
   @@map("package")
 }
@@ -83,6 +88,41 @@ model Item {
   @@map("item")
 }
 
+model Payment {
+  id     Int           @id @default(autoincrement())
+  amount Float
+  status PaymentStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  subscription Subscription?
+
+  @@map("payment")
+}
+
+model Subscription {
+  id        Int                @id @default(autoincrement())
+  startDate DateTime
+  endDate   DateTime
+  status    SubscriptionStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+  paymentId Int     @unique
+  payment   Payment @relation(fields: [paymentId], references: [id])
+  packageId Int
+  package   Package @relation(fields: [packageId], references: [id])
+
+  @@map("subscription")
+}
+
 enum Role {
   USER
   MANAGER
@@ -92,4 +132,14 @@ enum Role {
 enum Category {
   SNEAKERS
   SOCKS
+}
+
+enum PaymentStatus {
+  SUCCESS
+  FAIL
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
 }
