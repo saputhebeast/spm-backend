@@ -22,32 +22,38 @@ export class ItemEditDto {
   sellerId?: number;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   brand: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   outdoor: string;
 
   @IsString()
+  @IsOptional()
   gender: string;
 
   @IsNumber()
+  @IsOptional()
   age: number;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   size: string;
 
   @IsString()
+  @IsOptional()
   material: string;
 
   @IsString()
+  @IsOptional()
   tags: string;
 
   @IsString()
+  @IsOptional()
   color: string;
 
   @IsNumber()
+  @IsOptional()
   rating: number;
 }
