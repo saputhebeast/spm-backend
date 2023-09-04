@@ -19,8 +19,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  payments      Payment[]
-  subscriptions Subscription[]
+  payments        Payment[]
+  subscriptions   Subscription[]
+  shippingDetails ShippingDetails?
 
   @@map("user")
 }
@@ -121,6 +122,21 @@ model Subscription {
   package   Package @relation(fields: [packageId], references: [id])
 
   @@map("subscription")
+}
+
+model ShippingDetails {
+  id         Int     @id @default(autoincrement())
+  lane1      String?
+  lane2      String?
+  city       String
+  state      String?
+  country    String
+  postalCode String
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("shipping_details")
 }
 
 enum Role {
