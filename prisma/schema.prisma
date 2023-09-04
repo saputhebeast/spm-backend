@@ -19,8 +19,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  payments      Payment[]
-  subscriptions Subscription[]
+  payments          Payment[]
+  subscriptions     Subscription[]
+  shippingDetails   ShippingDetails?
+  subscriptionBoxes SubscriptionBox[]
 
   @@map("user")
 }
@@ -85,6 +87,9 @@ model Item {
   sellerId Int
   seller   Seller @relation(fields: [sellerId], references: [id])
 
+  subscriptionBox          SubscriptionBox[]
+  ItemsOnSubscriptionBoxes ItemsOnSubscriptionBoxes[]
+
   @@map("item")
 }
 
@@ -121,6 +126,51 @@ model Subscription {
   package   Package @relation(fields: [packageId], references: [id])
 
   @@map("subscription")
+}
+
+model ShippingDetails {
+  id         Int     @id @default(autoincrement())
+  lane1      String?
+  lane2      String?
+  city       String
+  state      String?
+  country    String
+  postalCode String
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("shipping_details")
+}
+
+model SubscriptionBox {
+  id    Int   @id @default(autoincrement())
+  total Float
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items Item[]
+
+  userId                   Int
+  user                     User                       @relation(fields: [userId], references: [id])
+  ItemsOnSubscriptionBoxes ItemsOnSubscriptionBoxes[]
+
+  @@map("subscription_box")
+}
+
+model ItemsOnSubscriptionBoxes {
+  itemId Int
+  item   Item @relation(fields: [itemId], references: [id])
+
+  subscriptionBoxId Int
+  subscription_box  SubscriptionBox @relation(fields: [subscriptionBoxId], references: [id])
+
+  @@id([itemId, subscriptionBoxId])
+  @@map("item_subscription_box")
 }
 
 enum Role {
