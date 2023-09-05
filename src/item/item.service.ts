@@ -6,7 +6,12 @@ import {
 } from '@nestjs/common';
 import { ItemRepository } from './item.repository';
 import { mapItemToItemSellerResponseDto } from '../common/mapper';
-import { ItemEditDto, ItemResponseDto, ItemSellerDto } from './dto';
+import {
+  ItemCreateDto,
+  ItemEditDto,
+  ItemResponseDto,
+  ItemSellerDto,
+} from './dto';
 
 @Injectable()
 export class ItemService {
@@ -14,7 +19,10 @@ export class ItemService {
 
   constructor(private itemRepository: ItemRepository) {}
 
-  async createItem(userId: number, itemDto): Promise<ItemResponseDto> {
+  async createItem(
+    userId: number,
+    itemDto: ItemCreateDto,
+  ): Promise<ItemResponseDto> {
     this.logger.log(`createItem: execution started by user- ${userId}`);
 
     const item: ItemSellerDto = await this.itemRepository.saveItem(itemDto);
@@ -76,9 +84,8 @@ export class ItemService {
 
     await this.getItem(userId, itemId);
 
-    const deletedItem: ItemSellerDto = await this.itemRepository.deleteItem(
-      itemId,
-    );
+    const deletedItem: ItemSellerDto =
+      await this.itemRepository.deleteItem(itemId);
 
     if (!deletedItem) {
       throw new InternalServerErrorException('Unable to delete the item');

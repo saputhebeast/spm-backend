@@ -24,7 +24,6 @@ export class ItemCreateDto {
   @IsNotEmpty()
   sellerId: number;
 
-  
   @IsString()
   @IsNotEmpty()
   brand: string;
@@ -54,5 +53,4 @@ export class ItemCreateDto {
 
   @IsNumber()
   rating: number;
-
 }
