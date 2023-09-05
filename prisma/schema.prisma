@@ -19,8 +19,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  payments      Payment[]
-  subscriptions Subscription[]
+  payments          Payment[]
+  subscriptions     Subscription[]
+  subscriptionBoxes SubscriptionBox[]
 
   @@map("user")
 }
@@ -83,7 +84,8 @@ model Item {
   updatedAt DateTime @updatedAt
 
   sellerId Int
-  seller   Seller @relation(fields: [sellerId], references: [id])
+  seller   Seller   @relation(fields: [sellerId], references: [id])
+  Review   Review[]
 
   @@map("item")
 }
@@ -142,4 +144,54 @@ enum PaymentStatus {
 enum SubscriptionStatus {
   ACTIVE
   INACTIVE
+}
+
+model SubscriptionBox {
+  id Int @id @default(autoincrement())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  feedbackId Int      @unique
+  feedback   Feedback @relation(fields: [feedbackId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("subscriptionBox")
+}
+
+model Feedback {
+  id                      Int     @id @default(autoincrement())
+  result                  String
+  isSubscriptionCancelled Boolean @default(false)
+  isPositive              Boolean
+
+  Review Review[]
+
+  subscriptionBox SubscriptionBox?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("feedback")
+}
+
+model Review {
+  id                Int     @id @default(autoincrement())
+  rating            Int
+  description       String
+  outcome           String
+  isReviewDiscarded Boolean @default(false)
+
+  feedBackId Int
+  feedback   Feedback @relation(fields: [feedBackId], references: [id])
+
+  itemId Int
+  item   Item @relation(fields: [itemId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("review")
 }
