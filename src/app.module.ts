@@ -13,6 +13,8 @@ import { SellerModule } from './seller/seller.module';
 import { ItemModule } from './item/item.module';
 import { PaymentModule } from './payment/payment.module';
 import { SubscriptionModule } from './subscription/subscription.module';
+import { SubscriptionBoxModule } from './subscription-box/subscription-box.module';
+import { ItemsOnSubscriptionBoxesModule } from './items-on-subscription-boxes/items-on-subscription-boxes.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { SubscriptionModule } from './subscription/subscription.module';
     ItemModule,
     PaymentModule,
     SubscriptionModule,
+    SubscriptionBoxModule,
+    ItemsOnSubscriptionBoxesModule,
   ],
 })
 export class AppModule implements NestModule {
