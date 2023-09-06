@@ -21,6 +21,7 @@ model User {
 
   payments          Payment[]
   subscriptions     Subscription[]
+  shippingDetails   ShippingDetails?
   subscriptionBoxes SubscriptionBox[]
 
   @@map("user")
@@ -87,6 +88,9 @@ model Item {
   seller   Seller   @relation(fields: [sellerId], references: [id])
   Review   Review[]
 
+  subscriptionBox          SubscriptionBox[]
+  ItemsOnSubscriptionBoxes ItemsOnSubscriptionBoxes[]
+
   @@map("item")
 }
 
@@ -125,6 +129,52 @@ model Subscription {
   @@map("subscription")
 }
 
+model ShippingDetails {
+  id         Int     @id @default(autoincrement())
+  lane1      String?
+  lane2      String?
+  city       String
+  state      String?
+  country    String
+  postalCode String
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("shipping_details")
+}
+
+model SubscriptionBox {
+  id    Int   @id @default(autoincrement())
+  total Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items Item[]
+
+  userId                   Int
+  user                     User                       @relation(fields: [userId], references: [id])
+  ItemsOnSubscriptionBoxes ItemsOnSubscriptionBoxes[]
+  feedback                 Feedback?
+
+  @@map("subscription_box")
+}
+
+model ItemsOnSubscriptionBoxes {
+  itemId Int
+  item   Item @relation(fields: [itemId], references: [id])
+
+  subscriptionBoxId Int
+  subscription_box  SubscriptionBox @relation(fields: [subscriptionBoxId], references: [id])
+
+  @@id([itemId, subscriptionBoxId])
+  @@map("item_subscription_box")
+}
+
 enum Role {
   USER
   MANAGER
@@ -146,21 +196,6 @@ enum SubscriptionStatus {
   INACTIVE
 }
 
-model SubscriptionBox {
-  id Int @id @default(autoincrement())
-
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
-
-  feedbackId Int      @unique
-  feedback   Feedback @relation(fields: [feedbackId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("subscriptionBox")
-}
-
 model Feedback {
   id                      Int     @id @default(autoincrement())
   result                  String
@@ -169,7 +204,8 @@ model Feedback {
 
   Review Review[]
 
-  subscriptionBox SubscriptionBox?
+  subscriptionBoxId Int @unique
+  subscriptionBox   SubscriptionBox @relation(fields: [subscriptionBoxId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

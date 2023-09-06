@@ -70,4 +70,25 @@ export class ItemRepository {
       },
     });
   }
+
+  async findManyItems(items: number[]) {
+    return this.prisma.item.findMany({
+      where: {
+        id: {
+          in: items,
+        },
+      },
+    });
+  }
+
+  async updateItemQuantity(id: number, quantity: number) {
+    await this.prisma.item.update({
+      where: {
+        id: id,
+      },
+      data: {
+        quantity: quantity,
+      },
+    });
+  }
 }
