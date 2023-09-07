@@ -45,9 +45,8 @@ export class SubscriptionBoxController {
     @GetUser('id') userId: number,
     @Res() res: Response,
   ) {
-    const data = await this.subscriptionBoxService.getSubscriptionBoxesByAdmin(
-      userId,
-    );
+    const data =
+      await this.subscriptionBoxService.getSubscriptionBoxesByAdmin(userId);
     return makeResponse({
       res,
       status: HttpStatus.OK,
@@ -81,9 +80,8 @@ export class SubscriptionBoxController {
     @GetUser('id') userId: number,
     @Res() res: Response,
   ) {
-    const data = await this.subscriptionBoxService.getSubscriptionBoxesByUser(
-      userId,
-    );
+    const data =
+      await this.subscriptionBoxService.getSubscriptionBoxesByUser(userId);
     return makeResponse({
       res,
       status: HttpStatus.OK,
