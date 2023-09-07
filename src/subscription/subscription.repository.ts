@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { SubscriptionCreateDto, SubscriptionDto } from './dto';
-import { SubscriptionStatusUpdateDto } from './dto';
+import {
+  SubscriptionCreateDto,
+  SubscriptionDto,
+  SubscriptionStatusUpdateDto,
+} from './dto';
 
 @Injectable()
 export class SubscriptionRepository {
@@ -89,6 +92,22 @@ export class SubscriptionRepository {
       },
       data: {
         ...updateDto,
+      },
+      include: {
+        user: true,
+        payment: true,
+        package: true,
+      },
+    });
+  }
+
+  async deleteSubscription(subscriptionId: number): Promise<SubscriptionDto> {
+    return this.prisma.subscription.update({
+      where: {
+        id: subscriptionId,
+      },
+      data: {
+        isActive: false,
       },
       include: {
         user: true,

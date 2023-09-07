@@ -35,4 +35,12 @@ export class SubscriptionBoxController {
       message: 'Subscription box created',
     });
   }
+
+  // get all subscription boxes by super admin
+  // get a subscription box by id
+
+  // get all subscription boxes by current user
+  // get a subscription box with id by current user
+
+  // update a subscription box
 }

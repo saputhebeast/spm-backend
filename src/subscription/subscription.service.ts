@@ -10,10 +10,10 @@ import {
   SubscriptionCreateDto,
   SubscriptionDto,
   SubscriptionResponseDto,
+  SubscriptionStatusUpdateDto,
 } from './dto';
 import { mapSubscriptionToSubscriptionResponseDto } from '../common/mapper';
 import { ManagerSuperAdminGuard, UserGuard } from '../auth/guard';
-import { SubscriptionStatusUpdateDto } from './dto';
 
 @Injectable()
 export class SubscriptionService {
@@ -160,6 +160,22 @@ export class SubscriptionService {
     }
 
     return this.mapSubscriptionToSubscriptionResponseDto(updatedSubscription);
+  }
+
+  async deleteSubscription(
+    userId: number,
+    subscriptionId: number,
+  ): Promise<void> {
+    this.logger.log(`deleteSubscription: execution started by user- ${userId}`);
+
+    const subscription: SubscriptionDto =
+      await this.subscriptionRepository.getSubscriptionById(subscriptionId);
+
+    if (!subscription) {
+      throw new NotFoundException('Subscription not found');
+    }
+
+    await this.subscriptionRepository.deleteSubscription(subscriptionId);
   }
 
   private mapSubscriptionToSubscriptionResponseDto(
