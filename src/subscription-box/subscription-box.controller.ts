@@ -2,6 +2,7 @@ import { JwtGuard, ManagerSuperAdminGuard } from '../auth/guard';
 import {
   Body,
   Controller,
+  Get,
   HttpStatus,
   Post,
   Res,
@@ -36,7 +37,23 @@ export class SubscriptionBoxController {
     });
   }
 
-  // get all subscription boxes by super admin
+  @Get('admin')
+  @UseGuards(ManagerSuperAdminGuard)
+  async getAllSubscriptionBoxes(
+    @GetUser('id') userId: number,
+    @Res() res: Response,
+  ) {
+    const data = await this.subscriptionBoxService.getSubscriptionBoxesByAdmin(
+      userId,
+    );
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Subscription box retrieved successfully',
+    });
+  }
+
   // get a subscription box by id
 
   // get all subscription boxes by current user

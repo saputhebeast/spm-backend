@@ -31,6 +31,7 @@ export class SubscriptionRepository {
     return this.prisma.subscription.findFirst({
       where: {
         id: subscriptionId,
+        isActive: true,
       },
       include: {
         user: true,
@@ -42,6 +43,9 @@ export class SubscriptionRepository {
 
   async getAllSubscriptions(): Promise<SubscriptionDto[]> {
     return this.prisma.subscription.findMany({
+      where: {
+        isActive: true,
+      },
       include: {
         user: true,
         payment: true,
@@ -58,6 +62,7 @@ export class SubscriptionRepository {
       where: {
         id: subscriptionId,
         userId: userId,
+        isActive: true,
       },
       include: {
         user: true,
@@ -73,6 +78,7 @@ export class SubscriptionRepository {
     return this.prisma.subscription.findMany({
       where: {
         userId: userId,
+        isActive: true,
       },
       include: {
         user: true,

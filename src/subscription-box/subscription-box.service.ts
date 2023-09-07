@@ -5,7 +5,6 @@ import { ItemsOnSubscriptionBoxesRepository } from '../items-on-subscription-box
 import { ItemRepository } from '../item/item.repository';
 import { mapSubscriptionBoxSubscriptionBoxResponseDtoMapper } from '../common/mapper';
 import { UserRepository } from '../user/user.repository';
-import { UserResponseDto } from '../user/dto';
 
 @Injectable()
 export class SubscriptionBoxService {
@@ -78,6 +77,27 @@ export class SubscriptionBoxService {
       existingItems,
       subscriptionBox,
     );
+  }
+
+  async getSubscriptionBoxesByAdmin(userId: number) {
+    this.logger.log(
+      `getSubscriptionBoxesByAdmin: execution started by user- ${userId}`,
+    );
+
+    const subscriptionBoxes = await this.subscriptionBoxRepository.getAll();
+
+    return subscriptionBoxes.map((subscriptionBox) => {
+      const { user, ItemsOnSubscriptionBoxes, ...subscriptionBoxData } =
+        subscriptionBox;
+      const items = ItemsOnSubscriptionBoxes.map((itemLink) => {
+        return itemLink.item;
+      });
+      return this.mapSubscriptionBoxSubscriptionBoxResponseDtoMapper(
+        user,
+        items,
+        subscriptionBoxData,
+      );
+    });
   }
 
   private mapSubscriptionBoxSubscriptionBoxResponseDtoMapper(
