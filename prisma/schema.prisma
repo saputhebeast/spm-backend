@@ -201,10 +201,12 @@ model Feedback {
   result                  String
   isSubscriptionCancelled Boolean @default(false)
   isPositive              Boolean
+  description             String
+  isSubmitted             Boolean
 
   Review Review[]
 
-  subscriptionBoxId Int @unique
+  subscriptionBoxId Int             @unique
   subscriptionBox   SubscriptionBox @relation(fields: [subscriptionBoxId], references: [id])
 
   createdAt DateTime @default(now())
