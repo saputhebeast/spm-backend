@@ -1,1 +1,1 @@
-
+export class ReviewResponseDto {}

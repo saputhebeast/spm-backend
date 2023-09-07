@@ -223,6 +223,7 @@ model Review {
   isPositive        Boolean?
   sentiment         String?
   opinion           String?
+  isActive          Boolean
 
   feedBackId Int
   feedback   Feedback @relation(fields: [feedBackId], references: [id])

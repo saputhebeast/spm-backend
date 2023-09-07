@@ -1,6 +1,6 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ReviewCreateDto } from './dto/review.create.dto';
+import { ReviewCreateDto, ReviewUpdateDto } from './dto';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class ReviewRepository {
@@ -13,18 +13,62 @@ export class ReviewRepository {
         feedBackId: dto.feedbackId,
         rating: dto.rating,
         description: dto.description,
+        isActive: true,
       },
       include: {
         feedback: true,
         item: true,
       },
-      select: {
-        id: true,
-        rating: true,
-        description: true,
-        feedBackId: true,
-        item: true,
-        createdAt: true,
+    });
+  }
+
+  async updateReview(dto: ReviewUpdateDto) {
+    return this.prisma.review.update({
+      where: {
+        id: dto.id,
+      },
+      data: {
+        isPositive: dto.isPositive,
+        isReviewDiscarded: dto.isDiscarded,
+        opinion: dto.opinion,
+        sentiment: dto.sentiment,
+        isActive: dto.isActive,
+      },
+    });
+  }
+
+  async deleteReviewById(reviewId: number) {
+    return this.prisma.review.delete({
+      where: {
+        id: reviewId,
+      },
+    });
+  }
+
+  async getReviewById(reviewId: number) {
+    return this.prisma.review.findUnique({
+      where: {
+        id: reviewId,
+      },
+    });
+  }
+
+  async getAllReviews() {
+    return this.prisma.review.findMany({});
+  }
+
+  async getReviewsByItemId(itemId: number) {
+    return this.prisma.review.findMany({
+      where: {
+        itemId: itemId,
+      },
+    });
+  }
+
+  async getReviewsByFeedbackId(feedbackId: number) {
+    return this.prisma.review.findMany({
+      where: {
+        feedBackId: feedbackId,
       },
     });
   }
