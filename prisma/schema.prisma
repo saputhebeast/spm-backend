@@ -198,11 +198,11 @@ enum SubscriptionStatus {
 
 model Feedback {
   id                      Int     @id @default(autoincrement())
-  result                  String
+  result                  String?
   isSubscriptionCancelled Boolean @default(false)
-  isPositive              Boolean
   description             String
-  isSubmitted             Boolean
+  isSubmitted             Boolean @default(false)
+  outcome                 String?
 
   Review Review[]
 
@@ -216,11 +216,13 @@ model Feedback {
 }
 
 model Review {
-  id                Int     @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   rating            Int
   description       String
-  outcome           String
-  isReviewDiscarded Boolean @default(false)
+  isReviewDiscarded Boolean  @default(false)
+  isPositive        Boolean?
+  sentiment         String?
+  opinion           String?
 
   feedBackId Int
   feedback   Feedback @relation(fields: [feedBackId], references: [id])
