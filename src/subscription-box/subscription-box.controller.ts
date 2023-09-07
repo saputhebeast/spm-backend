@@ -1,9 +1,11 @@
-import { JwtGuard, ManagerSuperAdminGuard } from '../auth/guard';
+import { JwtGuard, ManagerSuperAdminGuard, UserGuard } from '../auth/guard';
 import {
   Body,
   Controller,
   Get,
   HttpStatus,
+  Param,
+  ParseIntPipe,
   Post,
   Res,
   UseGuards,
@@ -50,14 +52,65 @@ export class SubscriptionBoxController {
       res,
       status: HttpStatus.OK,
       data,
+      message: 'Subscription boxes retrieved successfully',
+    });
+  }
+
+  @Get('admin/:id')
+  @UseGuards(ManagerSuperAdminGuard)
+  async getASubscriptionBox(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) subscriptionId: number,
+    @Res() res: Response,
+  ) {
+    const data = await this.subscriptionBoxService.getASubscriptionBox(
+      userId,
+      subscriptionId,
+    );
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
       message: 'Subscription box retrieved successfully',
     });
   }
 
-  // get a subscription box by id
+  @Get('user')
+  @UseGuards(UserGuard)
+  async getAllSubscriptionBoxesByCurrentUser(
+    @GetUser('id') userId: number,
+    @Res() res: Response,
+  ) {
+    const data = await this.subscriptionBoxService.getSubscriptionBoxesByUser(
+      userId,
+    );
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Subscription boxes retrieved successfully',
+    });
+  }
 
-  // get all subscription boxes by current user
-  // get a subscription box with id by current user
+  @Get('user/:id')
+  @UseGuards(UserGuard)
+  async getASubscriptionBoxesByCurrentUser(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) subscriptionId: number,
+    @Res() res: Response,
+  ) {
+    const data =
+      await this.subscriptionBoxService.getASubscriptionBoxesByCurrentUser(
+        userId,
+        subscriptionId,
+      );
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Subscription box retrieved successfully',
+    });
+  }
 
   // update a subscription box
 }

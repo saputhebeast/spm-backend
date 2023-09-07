@@ -100,6 +100,55 @@ export class SubscriptionBoxService {
     });
   }
 
+  async getASubscriptionBox(userId: number, subscriptionId: number) {
+    this.logger.log(
+      `getASubscriptionBox: execution started by user- ${userId}`,
+    );
+
+    const subscriptionBox =
+      await this.subscriptionBoxRepository.getSubscriptionBoxById(
+        subscriptionId,
+      );
+
+    if (!subscriptionBox) {
+      throw new NotFoundException('Subscription box not found');
+    }
+
+    const items = subscriptionBox.ItemsOnSubscriptionBoxes.map((itemLink) => {
+      return itemLink.item;
+    });
+
+    return this.mapSubscriptionBoxSubscriptionBoxResponseDtoMapper(
+      subscriptionBox.user,
+      items,
+      subscriptionBox,
+    );
+  }
+
+  async getSubscriptionBoxesByUser(userId: number) {
+    this.logger.log(
+      `getSubscriptionBoxesByUser: execution started by user- ${userId}`,
+    );
+
+    const subscriptionBoxes =
+      await this.subscriptionBoxRepository.getAllByCurrentUser(userId);
+
+    return subscriptionBoxes.map((subscriptionBox) => {
+      const { user, ItemsOnSubscriptionBoxes, ...subscriptionBoxData } =
+        subscriptionBox;
+
+      const items = ItemsOnSubscriptionBoxes.map((itemLink) => {
+        return itemLink.item;
+      });
+
+      return mapSubscriptionBoxSubscriptionBoxResponseDtoMapper(
+        user,
+        items,
+        subscriptionBoxData,
+      );
+    });
+  }
+
   private mapSubscriptionBoxSubscriptionBoxResponseDtoMapper(
     user,
     items,
@@ -107,6 +156,35 @@ export class SubscriptionBoxService {
   ) {
     return mapSubscriptionBoxSubscriptionBoxResponseDtoMapper(
       user,
+      items,
+      subscriptionBox,
+    );
+  }
+
+  async getASubscriptionBoxesByCurrentUser(
+    userId: number,
+    subscriptionId: number,
+  ) {
+    this.logger.log(
+      `getASubscriptionBoxesByCurrentUser: execution started by user- ${userId}`,
+    );
+
+    const subscriptionBox =
+      await this.subscriptionBoxRepository.getSubscriptionBoxByCurrentUserId(
+        userId,
+        subscriptionId,
+      );
+
+    if (!subscriptionBox) {
+      throw new NotFoundException('Subscription box not found');
+    }
+
+    const items = subscriptionBox.ItemsOnSubscriptionBoxes.map((itemLink) => {
+      return itemLink.item;
+    });
+
+    return this.mapSubscriptionBoxSubscriptionBoxResponseDtoMapper(
+      subscriptionBox.user,
       items,
       subscriptionBox,
     );
