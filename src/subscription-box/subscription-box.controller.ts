@@ -1,8 +1,11 @@
-import { JwtGuard, ManagerSuperAdminGuard } from '../auth/guard';
+import { JwtGuard, ManagerSuperAdminGuard, UserGuard } from '../auth/guard';
 import {
   Body,
   Controller,
+  Get,
   HttpStatus,
+  Param,
+  ParseIntPipe,
   Post,
   Res,
   UseGuards,
@@ -35,4 +38,77 @@ export class SubscriptionBoxController {
       message: 'Subscription box created',
     });
   }
+
+  @Get('admin')
+  @UseGuards(ManagerSuperAdminGuard)
+  async getAllSubscriptionBoxes(
+    @GetUser('id') userId: number,
+    @Res() res: Response,
+  ) {
+    const data =
+      await this.subscriptionBoxService.getSubscriptionBoxesByAdmin(userId);
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Subscription boxes retrieved successfully',
+    });
+  }
+
+  @Get('admin/:id')
+  @UseGuards(ManagerSuperAdminGuard)
+  async getASubscriptionBox(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) subscriptionId: number,
+    @Res() res: Response,
+  ) {
+    const data = await this.subscriptionBoxService.getASubscriptionBox(
+      userId,
+      subscriptionId,
+    );
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Subscription box retrieved successfully',
+    });
+  }
+
+  @Get('user')
+  @UseGuards(UserGuard)
+  async getAllSubscriptionBoxesByCurrentUser(
+    @GetUser('id') userId: number,
+    @Res() res: Response,
+  ) {
+    const data =
+      await this.subscriptionBoxService.getSubscriptionBoxesByUser(userId);
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Subscription boxes retrieved successfully',
+    });
+  }
+
+  @Get('user/:id')
+  @UseGuards(UserGuard)
+  async getASubscriptionBoxesByCurrentUser(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) subscriptionId: number,
+    @Res() res: Response,
+  ) {
+    const data =
+      await this.subscriptionBoxService.getASubscriptionBoxesByCurrentUser(
+        userId,
+        subscriptionId,
+      );
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Subscription box retrieved successfully',
+    });
+  }
+
+  // TODO: update a subscription box
 }

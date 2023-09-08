@@ -13,4 +13,69 @@ export class SubscriptionBoxRepository {
       },
     });
   }
+
+  async getAll() {
+    return this.prisma.subscriptionBox.findMany({
+      include: {
+        user: true,
+        ItemsOnSubscriptionBoxes: {
+          include: {
+            item: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getSubscriptionBoxById(subscriptionId: number) {
+    return this.prisma.subscriptionBox.findFirst({
+      where: {
+        id: subscriptionId,
+      },
+      include: {
+        user: true,
+        ItemsOnSubscriptionBoxes: {
+          include: {
+            item: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getAllByCurrentUser(userId: number) {
+    return this.prisma.subscriptionBox.findMany({
+      where: {
+        userId: userId,
+      },
+      include: {
+        user: true,
+        ItemsOnSubscriptionBoxes: {
+          include: {
+            item: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getSubscriptionBoxByCurrentUserId(
+    userId: number,
+    subscriptionId: number,
+  ) {
+    return this.prisma.subscriptionBox.findFirst({
+      where: {
+        id: subscriptionId,
+        userId: userId,
+      },
+      include: {
+        user: true,
+        ItemsOnSubscriptionBoxes: {
+          include: {
+            item: true,
+          },
+        },
+      },
+    });
+  }
 }
