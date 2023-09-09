@@ -55,9 +55,9 @@ export class ReviewController {
     @Body() updateDto: ReviewUpdateDto,
     @Res() res: Response,
   ) {
-    updateDto.id = reviewId;
     const data: Review = await this.reviewService.updateReview(
       userId,
+      reviewId,
       updateDto,
     );
     return makeResponse({

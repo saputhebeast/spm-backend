@@ -13,4 +13,12 @@ export class SubscriptionBoxRepository {
       },
     });
   }
+
+  async findSubscriptionBoxById(id: number) {
+    return this.prisma.subscriptionBox.findUnique({
+      where: {
+        id: id,
+      },
+    });
+  }
 }

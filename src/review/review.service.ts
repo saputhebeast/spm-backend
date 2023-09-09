@@ -27,12 +27,17 @@ export class ReviewService {
     return review;
   }
 
-  async updateReview(userId: number, reviewUpdateDto: ReviewUpdateDto) {
+  async updateReview(
+    userId: number,
+    reviewId: number,
+    reviewUpdateDto: ReviewUpdateDto,
+  ) {
     this.logger.log(`updateReview: execution started by user- ${userId}`);
 
-    await this.getReviewById(userId, reviewUpdateDto.id);
+    await this.getReviewById(userId, reviewId);
 
     const updatedReview: Review = await this.reviewRepository.updateReview(
+      reviewId,
       reviewUpdateDto,
     );
 
@@ -44,7 +49,7 @@ export class ReviewService {
   }
 
   async deleteReview(userId: number, reviewId: number) {
-    this.logger.log(`deletePackage: execution started by user- ${userId}`);
+    this.logger.log(`deleteReview: execution started by user- ${userId}`);
 
     await this.getReviewById(userId, reviewId);
 

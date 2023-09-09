@@ -22,10 +22,10 @@ export class ReviewRepository {
     });
   }
 
-  async updateReview(dto: ReviewUpdateDto) {
+  async updateReview(reviewId: number, dto: ReviewUpdateDto) {
     return this.prisma.review.update({
       where: {
-        id: dto.id,
+        id: reviewId,
       },
       data: {
         isPositive: dto.isPositive,
