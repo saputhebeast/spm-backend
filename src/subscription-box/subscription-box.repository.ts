@@ -14,7 +14,6 @@ export class SubscriptionBoxRepository {
     });
   }
 
-
   async getAll() {
     return this.prisma.subscriptionBox.findMany({
       include: {
