@@ -34,7 +34,7 @@ export class FeedbackService {
     );
 
     const subscriptionBox: SubscriptionBox =
-      await this.subscriptionBoxRepository.findSubscriptionBoxById(
+      await this.subscriptionBoxRepository.getSubscriptionBoxById(
         feedbackDto.subscriptionBoxId,
       );
     if (subscriptionBox.userId != userId) {
@@ -64,7 +64,7 @@ export class FeedbackService {
     const feedbackToUpdate: Feedback =
       await this.feedbackRepository.getFeedbackById(feedbackId);
     const subscriptionBox: SubscriptionBox =
-      await this.subscriptionBoxRepository.findSubscriptionBoxById(
+      await this.subscriptionBoxRepository.getSubscriptionBoxById(
         feedbackToUpdate.subscriptionBoxId,
       );
     if (subscriptionBox.userId != userId) {
@@ -166,7 +166,7 @@ export class FeedbackService {
       feedbackId,
     );
     const subscriptionBox: SubscriptionBox =
-      await this.subscriptionBoxRepository.findSubscriptionBoxById(
+      await this.subscriptionBoxRepository.getSubscriptionBoxById(
         feedback.subscriptionBoxId,
       );
     const user: User = await this.userRepository.findUserById(userId);
