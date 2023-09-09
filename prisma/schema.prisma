@@ -115,6 +115,7 @@ model Subscription {
   startDate DateTime
   endDate   DateTime
   status    SubscriptionStatus
+  isActive  Boolean            @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
