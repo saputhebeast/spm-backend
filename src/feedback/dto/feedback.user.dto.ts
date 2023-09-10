@@ -5,7 +5,6 @@ export class FeedbackUserDto {
   @IsNotEmpty()
   subscriptionBoxId: number;
 
-  @IsNumber()
   @IsNotEmpty()
   description: string;
 }

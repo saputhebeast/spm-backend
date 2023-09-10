@@ -50,7 +50,7 @@ export class FeedbackController {
   @UseGuards(UserGuard)
   async updateFeedbackByFeedbackId(
     @GetUser('id') userId: number,
-    @Param('id') feedbackId: number,
+    @Param('id', ParseIntPipe) feedbackId: number,
     @Body() dto: FeedbackUpdateDto,
     @Res() res: Response,
   ) {
@@ -153,7 +153,7 @@ export class FeedbackController {
     });
   }
 
-  @Get(':feedbackId')
+  @Get('/detailed/:feedbackId')
   @UseGuards(UserGuard)
   async getFeedbackDetailedResponseById(
     @GetUser('id') userId: number,

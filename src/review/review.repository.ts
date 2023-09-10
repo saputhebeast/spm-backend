@@ -37,10 +37,21 @@ export class ReviewRepository {
     });
   }
 
+  // async deleteReviewById(reviewId: number) {
+  //   return this.prisma.review.delete({
+  //     where: {
+  //       id: reviewId,
+  //     },
+  //   });
+  // }
+
   async deleteReviewById(reviewId: number) {
-    return this.prisma.review.delete({
+    return this.prisma.review.update({
       where: {
         id: reviewId,
+      },
+      data: {
+        isActive: false,
       },
     });
   }
@@ -55,6 +66,9 @@ export class ReviewRepository {
 
   async getAllReviews() {
     return this.prisma.review.findMany({
+      where: {
+        isActive: true,
+      },
       include: {
         item: true,
       },

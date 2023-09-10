@@ -44,10 +44,21 @@ export class FeedbackRepository {
     });
   }
 
+  // async deleteFeedbackBySubscriptionBoxId(boxId: number) {
+  //   return this.prisma.feedback.delete({
+  //     where: {
+  //       subscriptionBoxId: boxId,
+  //     },
+  //   });
+  // }
+
   async deleteFeedbackBySubscriptionBoxId(boxId: number) {
-    return this.prisma.feedback.delete({
+    return this.prisma.feedback.update({
       where: {
         subscriptionBoxId: boxId,
+      },
+      data: {
+        isActive: false,
       },
     });
   }
@@ -57,6 +68,10 @@ export class FeedbackRepository {
       where: {
         id: feedbackId,
       },
+      include: {
+        subscriptionBox: true,
+        reviews: true,
+      },
     });
   }
 
@@ -65,10 +80,20 @@ export class FeedbackRepository {
       where: {
         subscriptionBoxId: boxId,
       },
+      include: {
+        subscriptionBox: true,
+      },
     });
   }
 
   async getAllFeedbacks() {
-    return this.prisma.feedback.findMany({});
+    return this.prisma.feedback.findMany({
+      where: {
+        isActive: true,
+      },
+      include: {
+        subscriptionBox: true,
+      },
+    });
   }
 }
