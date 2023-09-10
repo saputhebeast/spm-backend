@@ -151,4 +151,20 @@ export class ReviewController {
       message: 'Reviews Retrieved successfully',
     });
   }
+
+  @Post(':reviewId')
+  async analyseReview(
+    @GetUser('id') userId: number,
+    @Param('reviewId', ParseIntPipe) reviewId: number,
+    @Res() res: Response,
+  ) {
+    const data = await this.reviewService.analyse(userId, reviewId);
+
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data: data,
+      message: 'Reviews Analysed successfully',
+    });
+  }
 }

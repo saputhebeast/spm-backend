@@ -8,6 +8,7 @@ import {
 import { ReviewRepository } from './review.repository';
 import { ReviewCreateDto, ReviewUpdateDto } from './dto';
 import { Review } from '@prisma/client';
+import { analyse } from './review.analyses.service';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class ReviewService {
@@ -18,9 +19,8 @@ export class ReviewService {
   async saveReview(userId: number, reviewCreateDto: ReviewCreateDto) {
     this.logger.log(`createReview: execution started by user- ${userId}`);
 
-    const review: Review = await this.reviewRepository.saveReview(
-      reviewCreateDto,
-    );
+    const review: Review =
+      await this.reviewRepository.saveReview(reviewCreateDto);
     if (!review) {
       throw new InternalServerErrorException('Review not saved');
     }
@@ -34,7 +34,10 @@ export class ReviewService {
   ) {
     this.logger.log(`updateReview: execution started by user- ${userId}`);
 
-    await this.getReviewById(userId, reviewId);
+    const review: Review = await this.getReviewById(userId, reviewId);
+    reviewUpdateDto.isActive =
+      review.isActive == true ? true : reviewUpdateDto.isActive;
+
     const updatedReview: Review = await this.reviewRepository.updateReview(
       reviewId,
       reviewUpdateDto,
@@ -52,9 +55,8 @@ export class ReviewService {
 
     await this.getReviewById(userId, reviewId);
 
-    const reviewToDelete: Review = await this.reviewRepository.deleteReviewById(
-      reviewId,
-    );
+    const reviewToDelete: Review =
+      await this.reviewRepository.deleteReviewById(reviewId);
     if (!reviewToDelete) {
       throw new InternalServerErrorException('Failed to delete the review');
     }
@@ -97,12 +99,18 @@ export class ReviewService {
   async getReviewsByItemId(userId: number, itemId: number) {
     this.logger.log(`getReviewsByItemId: execution started by user- ${userId}`);
 
-    const reviews: Review[] = await this.reviewRepository.getReviewsByItemId(
-      itemId,
-    );
+    const reviews: Review[] =
+      await this.reviewRepository.getReviewsByItemId(itemId);
     if (!reviews) {
       throw new NotFoundException('No Review found');
     }
     return reviews;
+  }
+
+  async analyse(userId: number, reviewId: number) {
+    this.logger.log(`analyse: execution started by user- ${userId}`);
+    const review: Review = await this.reviewRepository.getReviewById(reviewId);
+
+    return await analyse(review.description);
   }
 }
