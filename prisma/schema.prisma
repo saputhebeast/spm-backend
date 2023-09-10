@@ -54,6 +54,8 @@ model Seller {
   postalCode String
   state      String
   country    String
+  slat        Float
+  slong       Float
   isActive   Boolean @default(true)
 
   createAt  DateTime @default(now())
@@ -115,6 +117,7 @@ model Subscription {
   startDate DateTime
   endDate   DateTime
   status    SubscriptionStatus
+  isActive  Boolean            @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -198,11 +201,11 @@ enum SubscriptionStatus {
 
 model Feedback {
   id                      Int     @id @default(autoincrement())
-  result                  String
+  result                  String?
   isSubscriptionCancelled Boolean @default(false)
-  isPositive              Boolean
   description             String
-  isSubmitted             Boolean
+  isSubmitted             Boolean @default(false)
+  outcome                 String?
 
   Review Review[]
 
@@ -216,11 +219,14 @@ model Feedback {
 }
 
 model Review {
-  id                Int     @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   rating            Int
   description       String
-  outcome           String
-  isReviewDiscarded Boolean @default(false)
+  isReviewDiscarded Boolean  @default(false)
+  isPositive        Boolean?
+  sentiment         String?
+  opinion           String?
+  isActive          Boolean
 
   feedBackId Int
   feedback   Feedback @relation(fields: [feedBackId], references: [id])

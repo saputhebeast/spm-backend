@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { SubscriptionCreateDto, SubscriptionDto } from './dto';
-import { SubscriptionStatusUpdateDto } from './dto';
+import {
+  SubscriptionCreateDto,
+  SubscriptionDto,
+  SubscriptionStatusUpdateDto,
+} from './dto';
 
 @Injectable()
 export class SubscriptionRepository {
@@ -28,6 +31,7 @@ export class SubscriptionRepository {
     return this.prisma.subscription.findFirst({
       where: {
         id: subscriptionId,
+        isActive: true,
       },
       include: {
         user: true,
@@ -39,6 +43,9 @@ export class SubscriptionRepository {
 
   async getAllSubscriptions(): Promise<SubscriptionDto[]> {
     return this.prisma.subscription.findMany({
+      where: {
+        isActive: true,
+      },
       include: {
         user: true,
         payment: true,
@@ -55,6 +62,7 @@ export class SubscriptionRepository {
       where: {
         id: subscriptionId,
         userId: userId,
+        isActive: true,
       },
       include: {
         user: true,
@@ -70,6 +78,7 @@ export class SubscriptionRepository {
     return this.prisma.subscription.findMany({
       where: {
         userId: userId,
+        isActive: true,
       },
       include: {
         user: true,
@@ -89,6 +98,22 @@ export class SubscriptionRepository {
       },
       data: {
         ...updateDto,
+      },
+      include: {
+        user: true,
+        payment: true,
+        package: true,
+      },
+    });
+  }
+
+  async deleteSubscription(subscriptionId: number): Promise<SubscriptionDto> {
+    return this.prisma.subscription.update({
+      where: {
+        id: subscriptionId,
+      },
+      data: {
+        isActive: false,
       },
       include: {
         user: true,
