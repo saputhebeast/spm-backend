@@ -9,6 +9,8 @@ export class SellerResponseDto {
   state: string;
   country: string;
   isActive: boolean;
+  slat: number;
+  slong: number;
   createdAt: Date;
   updatedAt: Date;
 }
