@@ -15,6 +15,8 @@ export function mapSellerToSellerResponseDto(
     state: seller.state,
     country: seller.country,
     isActive: seller.isActive,
+    slat: seller.slat,
+    slong: seller.slong,
     createdAt: seller.createAt,
     updatedAt: seller.updatedAt,
   };

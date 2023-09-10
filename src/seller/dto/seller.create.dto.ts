@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsOptional,
+} from 'class-validator';
 
 export class SellerCreateDto {
   @IsString()
@@ -10,16 +16,13 @@ export class SellerCreateDto {
   @IsEmail()
   email: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   line1: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   line2: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   city: string;
 
   @IsString()
@@ -29,6 +32,12 @@ export class SellerCreateDto {
   @IsString()
   @IsNotEmpty()
   state: string;
+
+  @IsNumber()
+  slat: number;
+
+  @IsNumber()
+  slong: number;
 
   @IsString()
   @IsNotEmpty()

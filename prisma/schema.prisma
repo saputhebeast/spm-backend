@@ -54,6 +54,8 @@ model Seller {
   postalCode String
   state      String
   country    String
+  slat        Float
+  slong       Float
   isActive   Boolean @default(true)
 
   createAt  DateTime @default(now())
