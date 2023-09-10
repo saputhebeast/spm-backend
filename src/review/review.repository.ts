@@ -54,7 +54,11 @@ export class ReviewRepository {
   }
 
   async getAllReviews() {
-    return this.prisma.review.findMany({});
+    return this.prisma.review.findMany({
+      include: {
+        item: true,
+      },
+    });
   }
 
   async getReviewsByItemId(itemId: number) {
