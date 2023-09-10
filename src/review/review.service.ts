@@ -9,7 +9,7 @@ import { ReviewRepository } from './review.repository';
 import { ReviewCreateDto, ReviewUpdateDto } from './dto';
 import { Review } from '@prisma/client';
 import { analyse } from './review.analyses.service';
-import {SentimentAnalysisResult} from "@azure/ai-language-text";
+import { SentimentAnalysisResult } from '@azure/ai-language-text';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class ReviewService {
@@ -20,9 +20,8 @@ export class ReviewService {
   async saveReview(userId: number, reviewCreateDto: ReviewCreateDto) {
     this.logger.log(`createReview: execution started by user- ${userId}`);
 
-    const review: Review = await this.reviewRepository.saveReview(
-      reviewCreateDto,
-    );
+    const review: Review =
+      await this.reviewRepository.saveReview(reviewCreateDto);
     if (!review) {
       throw new InternalServerErrorException('Review not saved');
     }
@@ -57,9 +56,8 @@ export class ReviewService {
 
     await this.getReviewById(userId, reviewId);
 
-    const reviewToDelete: Review = await this.reviewRepository.deleteReviewById(
-      reviewId,
-    );
+    const reviewToDelete: Review =
+      await this.reviewRepository.deleteReviewById(reviewId);
     if (!reviewToDelete) {
       throw new InternalServerErrorException('Failed to delete the review');
     }
@@ -102,9 +100,8 @@ export class ReviewService {
   async getReviewsByItemId(userId: number, itemId: number) {
     this.logger.log(`getReviewsByItemId: execution started by user- ${userId}`);
 
-    const reviews: Review[] = await this.reviewRepository.getReviewsByItemId(
-      itemId,
-    );
+    const reviews: Review[] =
+      await this.reviewRepository.getReviewsByItemId(itemId);
     if (!reviews) {
       throw new NotFoundException('No Review found');
     }
