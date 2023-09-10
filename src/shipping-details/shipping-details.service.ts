@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ShippingDetailsRepository } from './shipping-details.repository';
 import { ShippingDetailsCreateDto } from './dto';
-import { mapShippingToShippingDetailsResponseDto } from '../common/mapper';
+import {
+  mapShippingToShippingDetailsResponseDto
+} from "../common/mapper/shippingDetails.shippingDetailsResponseDto.mapper";
 
 @Injectable()
 export class ShippingDetailsService {
