@@ -42,9 +42,8 @@ export class FeedbackService {
       );
     }
 
-    const feedback: Feedback = await this.feedbackRepository.saveFeedback(
-      feedbackDto,
-    );
+    const feedback: Feedback =
+      await this.feedbackRepository.saveFeedback(feedbackDto);
     if (!feedback) {
       throw new InternalServerErrorException('Feedback not saved');
     }
@@ -127,9 +126,8 @@ export class FeedbackService {
   async getFeedbackById(userId: number, feedbackId: number) {
     this.logger.log(`getFeedbackById: execution started by user- ${userId}`);
 
-    const feedback: Feedback = await this.feedbackRepository.getFeedbackById(
-      feedbackId,
-    );
+    const feedback: Feedback =
+      await this.feedbackRepository.getFeedbackById(feedbackId);
     if (!feedback) {
       throw new NotFoundException('No feedback found');
     }
@@ -161,9 +159,8 @@ export class FeedbackService {
   }
 
   async getFeedbackDetailedResponseById(userId: number, feedbackId: number) {
-    const feedback: Feedback = await this.feedbackRepository.getFeedbackById(
-      feedbackId,
-    );
+    const feedback: Feedback =
+      await this.feedbackRepository.getFeedbackById(feedbackId);
     const subscriptionBox: SubscriptionBox =
       await this.subscriptionBoxRepository.getSubscriptionBoxById(
         feedback.subscriptionBoxId,
