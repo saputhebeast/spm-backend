@@ -5,14 +5,13 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { FeedbackUserDto, FeedbackResponseDto, FeedbackUpdateDto } from './dto';
+import { FeedbackUserDto, FeedbackUpdateDto } from './dto';
 import { FeedbackRepository } from './feedback.repository';
 import { Feedback, Review, SubscriptionBox, User } from '@prisma/client';
 import { SubscriptionBoxRepository } from '../subscription-box/subscription-box.repository';
 import { FeedbackToFeedbackResponseDtoMapper } from '../common/mapper';
 import { UserRepository } from '../user/user.repository';
 import { ReviewRepository } from '../review/review.repository';
-import { ReviewResponseDto } from '../review/dto';
 
 @Injectable()
 export class FeedbackService {
