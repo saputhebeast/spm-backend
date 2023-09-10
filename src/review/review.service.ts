@@ -9,7 +9,6 @@ import { ReviewRepository } from './review.repository';
 import { ReviewCreateDto, ReviewUpdateDto } from './dto';
 import { Review } from '@prisma/client';
 import { analyse } from './review.analyses.service';
-import {SentimentAnalysisResult} from "@azure/ai-language-text";
 
 @Injectable({ scope: Scope.DEFAULT })
 export class ReviewService {
