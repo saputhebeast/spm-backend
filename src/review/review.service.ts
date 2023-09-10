@@ -8,6 +8,8 @@ import {
 import { ReviewRepository } from './review.repository';
 import { ReviewCreateDto, ReviewUpdateDto } from './dto';
 import { Review } from '@prisma/client';
+import { analyse } from './review.analyses.service';
+import {SentimentAnalysisResult} from "@azure/ai-language-text";
 
 @Injectable({ scope: Scope.DEFAULT })
 export class ReviewService {
@@ -34,7 +36,10 @@ export class ReviewService {
   ) {
     this.logger.log(`updateReview: execution started by user- ${userId}`);
 
-    await this.getReviewById(userId, reviewId);
+    const review: Review = await this.getReviewById(userId, reviewId);
+    reviewUpdateDto.isActive =
+      review.isActive == true ? true : reviewUpdateDto.isActive;
+
     const updatedReview: Review = await this.reviewRepository.updateReview(
       reviewId,
       reviewUpdateDto,
@@ -104,5 +109,12 @@ export class ReviewService {
       throw new NotFoundException('No Review found');
     }
     return reviews;
+  }
+
+  async analyse(userId: number, reviewId: number) {
+    this.logger.log(`analyse: execution started by user- ${userId}`);
+    const review: Review = await this.reviewRepository.getReviewById(reviewId);
+
+    return await analyse(review.description);
   }
 }

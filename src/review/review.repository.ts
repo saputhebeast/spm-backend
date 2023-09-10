@@ -33,6 +33,7 @@ export class ReviewRepository {
         opinion: dto.opinion,
         sentiment: dto.sentiment,
         isActive: dto.isActive,
+        description: dto.description,
       },
     });
   }
@@ -80,6 +81,9 @@ export class ReviewRepository {
       where: {
         itemId: itemId,
       },
+      include: {
+        item: true,
+      },
     });
   }
 
@@ -87,6 +91,9 @@ export class ReviewRepository {
     return this.prisma.review.findMany({
       where: {
         feedBackId: feedbackId,
+      },
+      include: {
+        feedback: true,
       },
     });
   }
