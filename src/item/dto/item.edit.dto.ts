@@ -1,5 +1,5 @@
 import { Category } from '@prisma/client';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString , IsDate} from 'class-validator';
 
 export class ItemEditDto {
   @IsString()
@@ -56,4 +56,12 @@ export class ItemEditDto {
   @IsNumber()
   @IsOptional()
   rating: number;
+
+  @IsDate()
+  @IsOptional()
+  demandweek: Date;
+
+  @IsNumber()
+  @IsOptional()
+  demand: number;
 }

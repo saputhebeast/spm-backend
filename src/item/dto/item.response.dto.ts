@@ -20,5 +20,7 @@ export class ItemResponseDto {
   tags: string;
   color: string;
   rating: number;
+  demandweek: Date;
+  demand: number;
   isActive: boolean;
 }
