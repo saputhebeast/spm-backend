@@ -23,8 +23,9 @@ export function mapItemToItemSellerResponseDto(
     material: item.material,
     tags: item.tags,
     demandweek: item.demandweek,
+    demandCounter: item.demandCounter,
     demand: item.demand,
     color: item.color,
-    rating: item.rating,
+    rating: item.rating
   };
 }

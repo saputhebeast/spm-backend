@@ -61,4 +61,8 @@ export class ItemCreateDto {
   @IsNumber()
   @IsOptional()
   demand: number;
+
+  @IsNumber()
+  @IsOptional()
+  demandCounter: number;
 }

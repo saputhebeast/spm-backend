@@ -82,6 +82,7 @@ model Item {
   tags     String
   color    String
   demand   Int  @default(1)
+  demandCounter   Int  @default(1)
   demandweek DateTime @default(now())
   rating   Int
 

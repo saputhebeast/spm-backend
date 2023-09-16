@@ -22,5 +22,6 @@ export class ItemResponseDto {
   rating: number;
   demandweek: Date;
   demand: number;
+  demandCounter: number;
   isActive: boolean;
 }

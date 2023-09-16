@@ -19,5 +19,6 @@ export class ItemSellerDto {
   color: string;
   demandweek: Date;
   demand: number;
+  demandCounter: number;
   rating: number;
 }

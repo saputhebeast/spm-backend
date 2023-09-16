@@ -64,4 +64,8 @@ export class ItemEditDto {
   @IsNumber()
   @IsOptional()
   demand: number;
+
+  @IsNumber()
+  @IsOptional()
+  demandCounter: number;
 }
