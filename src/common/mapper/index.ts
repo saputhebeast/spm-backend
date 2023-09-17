@@ -7,3 +7,4 @@ export * from './item.itemSellerResponseDto.mapper';
 export * from './payment.paymentUserResponseDto.mapper';
 export * from './subscription.subscriptionResponseDto';
 export * from './subscriptionBox.subscriptionBoxResponseDto.mapper';
+export * from './shippingDetails.shippingDetailsResponseDto.mapper';

@@ -39,8 +39,9 @@ export class PaymentService {
   ): Promise<PaymentResponseDto> {
     this.logger.log(`getPaymentById: execution started by user- ${userId}`);
 
-    const payment: PaymentUserDto =
-      await this.paymentRepository.getPaymentById(paymentId);
+    const payment: PaymentUserDto = await this.paymentRepository.getPaymentById(
+      paymentId,
+    );
 
     if (!payment) {
       throw new InternalServerErrorException('Payment not found');

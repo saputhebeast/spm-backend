@@ -1,9 +1,9 @@
 import {
   IsEmail,
   IsNotEmpty,
-  IsString,
   IsNumber,
   IsOptional,
+  IsString,
 } from 'class-validator';
 
 export class SellerCreateDto {

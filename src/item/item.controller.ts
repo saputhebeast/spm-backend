@@ -14,7 +14,12 @@ import {
 import { JwtGuard, ManagerSuperAdminGuard } from '../auth/guard';
 import { GetUser } from '../auth/decorator';
 import { ItemService } from './item.service';
-import { ItemCreateDto, ItemEditDto, ItemResponseDto } from './dto';
+import {
+  ItemAvailableRequestDto,
+  ItemCreateDto,
+  ItemEditDto,
+  ItemResponseDto,
+} from './dto';
 import { makeResponse } from '../common/util';
 
 @UseGuards(JwtGuard)
@@ -57,6 +62,24 @@ export class ItemController {
       status: HttpStatus.OK,
       data,
       message: 'Package retrieved successfully',
+    });
+  }
+
+  @Get('available/items')
+  async getAllAvailableItems(
+    @GetUser('id') userId: number,
+    @Body() itemRequestDto: ItemAvailableRequestDto,
+    @Res() res: Response,
+  ): Promise<void> {
+    const data = await this.itemService.getAllAvailableItems(
+      userId,
+      itemRequestDto,
+    );
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Items retrieved successfully',
     });
   }
 
