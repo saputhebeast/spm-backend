@@ -88,9 +88,6 @@ export class FeedbackRepository {
 
   async getAllFeedbacks() {
     return this.prisma.feedback.findMany({
-      where: {
-        isActive: true,
-      },
       include: {
         subscriptionBox: true,
       },

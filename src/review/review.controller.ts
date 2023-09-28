@@ -154,11 +154,10 @@ export class ReviewController {
 
   @Post(':reviewId')
   async analyseReview(
-    @GetUser('id') userId: number,
     @Param('reviewId', ParseIntPipe) reviewId: number,
     @Res() res: Response,
   ) {
-    const data = await this.reviewService.analyse(userId, reviewId);
+    const data = await this.reviewService.analyse(reviewId);
 
     return makeResponse({
       res,
