@@ -107,8 +107,7 @@ export class ReviewService {
     return reviews;
   }
 
-  async analyse(userId: number, reviewId: number) {
-    this.logger.log(`analyse: execution started by user- ${userId}`);
+  async analyse(reviewId: number) {
     const review: Review = await this.reviewRepository.getReviewById(reviewId);
 
     return await analyse(review.description);

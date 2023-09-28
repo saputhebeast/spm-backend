@@ -54,8 +54,8 @@ model Seller {
   postalCode String
   state      String
   country    String
-  slat        Float
-  slong       Float
+  slat       Float
+  slong      Float
   isActive   Boolean @default(true)
 
   createAt  DateTime @default(now())
@@ -206,7 +206,7 @@ model Feedback {
   description             String
   isSubmitted             Boolean @default(false)
   outcome                 String?
-  isActive                Boolean @default(false)
+  isActive                Boolean @default(true)
 
   reviews Review[]
 
