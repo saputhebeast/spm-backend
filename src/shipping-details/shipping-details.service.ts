@@ -26,10 +26,6 @@ export class ShippingDetailsService {
     return this.mapShippingToShippingDetailsResponseDto(shippingDetails);
   }
 
-  private mapShippingToShippingDetailsResponseDto(shippingDetails) {
-    return mapShippingToShippingDetailsResponseDto(shippingDetails);
-  }
-
   async getShippingDetails(userId: number) {
     this.logger.log(`getShippingDetails: execution started by user- ${userId}`);
 
@@ -37,5 +33,9 @@ export class ShippingDetailsService {
       await this.shippingDetailsRepository.getShippingDetails(userId);
 
     return this.mapShippingToShippingDetailsResponseDto(shippingDetails);
+  }
+
+  private mapShippingToShippingDetailsResponseDto(shippingDetails) {
+    return mapShippingToShippingDetailsResponseDto(shippingDetails);
   }
 }
