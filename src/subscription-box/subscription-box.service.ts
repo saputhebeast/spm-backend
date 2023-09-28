@@ -149,18 +149,6 @@ export class SubscriptionBoxService {
     });
   }
 
-  private mapSubscriptionBoxSubscriptionBoxResponseDtoMapper(
-    user,
-    items,
-    subscriptionBox,
-  ) {
-    return mapSubscriptionBoxSubscriptionBoxResponseDtoMapper(
-      user,
-      items,
-      subscriptionBox,
-    );
-  }
-
   async getASubscriptionBoxesByCurrentUser(
     userId: number,
     subscriptionId: number,
@@ -185,6 +173,18 @@ export class SubscriptionBoxService {
 
     return this.mapSubscriptionBoxSubscriptionBoxResponseDtoMapper(
       subscriptionBox.user,
+      items,
+      subscriptionBox,
+    );
+  }
+
+  private mapSubscriptionBoxSubscriptionBoxResponseDtoMapper(
+    user,
+    items,
+    subscriptionBox,
+  ) {
+    return mapSubscriptionBoxSubscriptionBoxResponseDtoMapper(
+      user,
       items,
       subscriptionBox,
     );
