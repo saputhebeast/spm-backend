@@ -15,6 +15,8 @@ import { PaymentModule } from './payment/payment.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { SubscriptionBoxModule } from './subscription-box/subscription-box.module';
 import { ItemsOnSubscriptionBoxesModule } from './items-on-subscription-boxes/items-on-subscription-boxes.module';
+import { ReviewModule } from 'src/review/review.mdoule';
+import { FeedbackModule } from './feedback/feedback.module';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import { ItemsOnSubscriptionBoxesModule } from './items-on-subscription-boxes/it
     SubscriptionModule,
     SubscriptionBoxModule,
     ItemsOnSubscriptionBoxesModule,
+    ReviewModule,
+    FeedbackModule,
   ],
 })
 export class AppModule implements NestModule {

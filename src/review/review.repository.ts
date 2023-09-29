@@ -22,10 +22,10 @@ export class ReviewRepository {
     });
   }
 
-  async updateReview(dto: ReviewUpdateDto) {
+  async updateReview(reviewId: number, dto: ReviewUpdateDto) {
     return this.prisma.review.update({
       where: {
-        id: dto.id,
+        id: reviewId,
       },
       data: {
         isPositive: dto.isPositive,
@@ -33,14 +33,26 @@ export class ReviewRepository {
         opinion: dto.opinion,
         sentiment: dto.sentiment,
         isActive: dto.isActive,
+        description: dto.description,
       },
     });
   }
 
+  // async deleteReviewById(reviewId: number) {
+  //   return this.prisma.review.delete({
+  //     where: {
+  //       id: reviewId,
+  //     },
+  //   });
+  // }
+
   async deleteReviewById(reviewId: number) {
-    return this.prisma.review.delete({
+    return this.prisma.review.update({
       where: {
         id: reviewId,
+      },
+      data: {
+        isActive: false,
       },
     });
   }
@@ -54,13 +66,23 @@ export class ReviewRepository {
   }
 
   async getAllReviews() {
-    return this.prisma.review.findMany({});
+    return this.prisma.review.findMany({
+      where: {
+        isActive: true,
+      },
+      include: {
+        item: true,
+      },
+    });
   }
 
   async getReviewsByItemId(itemId: number) {
     return this.prisma.review.findMany({
       where: {
         itemId: itemId,
+      },
+      include: {
+        item: true,
       },
     });
   }
@@ -69,6 +91,9 @@ export class ReviewRepository {
     return this.prisma.review.findMany({
       where: {
         feedBackId: feedbackId,
+      },
+      include: {
+        feedback: true,
       },
     });
   }

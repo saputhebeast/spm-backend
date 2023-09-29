@@ -206,8 +206,9 @@ model Feedback {
   description             String
   isSubmitted             Boolean @default(false)
   outcome                 String?
+  isActive                Boolean @default(true)
 
-  Review Review[]
+  reviews Review[]
 
   subscriptionBoxId Int             @unique
   subscriptionBox   SubscriptionBox @relation(fields: [subscriptionBoxId], references: [id])
