@@ -23,6 +23,7 @@ model User {
   subscriptions     Subscription[]
   shippingDetails   ShippingDetails?
   subscriptionBoxes SubscriptionBox[]
+  preference        Preference?
 
   @@map("user")
 }
@@ -206,8 +207,9 @@ model Feedback {
   description             String
   isSubmitted             Boolean @default(false)
   outcome                 String?
+  isActive                Boolean @default(true)
 
-  Review Review[]
+  reviews Review[]
 
   subscriptionBoxId Int             @unique
   subscriptionBox   SubscriptionBox @relation(fields: [subscriptionBoxId], references: [id])
@@ -238,4 +240,21 @@ model Review {
   updatedAt DateTime @updatedAt
 
   @@map("review")
+}
+
+model Preference {
+  id       Int    @id @default(autoincrement())
+  brand    String
+  color    String
+  size     String
+  material String
+  type     String
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("preference")
 }
