@@ -7,11 +7,14 @@ import {
 import { ItemRepository } from './item.repository';
 import { mapItemToItemSellerResponseDto } from '../common/mapper';
 import {
+  ItemAvailableRequestDto,
   ItemCreateDto,
   ItemEditDto,
+  ItemRecommendationDto,
   ItemResponseDto,
   ItemSellerDto,
 } from './dto';
+import axios, { AxiosResponse } from 'axios';
 
 @Injectable()
 export class ItemService {
@@ -92,6 +95,42 @@ export class ItemService {
     }
 
     return this.mapItemToItemSellerResponseDto(deletedItem);
+  }
+
+  async getAllAvailableItems(
+    userId: number,
+    itemRequestDto: ItemAvailableRequestDto,
+  ): Promise<ItemRecommendationDto[]> {
+    try {
+      this.logger.log(
+        `getAllAvailableItems: execution started by user- ${userId}`,
+      );
+
+      const dbItems: { items: ItemResponseDto[] } = await this.getAllItems(
+        userId,
+      );
+      const recItems: AxiosResponse<any> = await axios.get(
+        'https://spm-recommendation-api-ebb89176d9c0.herokuapp.com/recommend',
+        { data: itemRequestDto },
+      );
+      const itemsWithRecommendation: ItemRecommendationDto[] = [];
+
+      for (const item of dbItems.items) {
+        const isRecommended = recItems.data.recommendations.some(
+          (recItem) => recItem.Model === item.itemName,
+        );
+        const itemWithRecommendation: ItemRecommendationDto = {
+          ...item,
+          isRecommend: isRecommended,
+        };
+        itemsWithRecommendation.push(itemWithRecommendation);
+      }
+
+      return itemsWithRecommendation;
+    } catch (error) {
+      console.error('Error making GET request:', error);
+      throw new InternalServerErrorException('Something went wrong');
+    }
   }
 
   private mapItemToItemSellerResponseDto(item: ItemSellerDto): ItemResponseDto {
