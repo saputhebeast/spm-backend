@@ -1,4 +1,5 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
+import { makeResponse } from 'src/common/util';
 import { MailerService } from './email.service';
 
 @Controller('email')
@@ -10,12 +11,14 @@ export class MailerController {
     @Body('to') to: string,
     @Body('subject') subject: string,
     @Body('message') message: string,
-  ) {
-    try {
-      await this.mailerService.sendEmail(to, subject, message);
-      return { success: true, message: 'Email sent successfully' };
-    } catch (error) {
-      return { success: false, message: 'Failed to send email' };
-    }
+    @Res() res: Response,
+  ): Promise<void> {
+    const data = await this.mailerService.sendEmail(to, subject, message);
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Email Sent Sucessfully',
+    });
   }
 }

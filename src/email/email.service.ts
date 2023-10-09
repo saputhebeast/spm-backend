@@ -25,11 +25,6 @@ export class MailerService {
       subject: subject,
       text: message,
     };
-
-    try {
-      await this.transporter.sendMail(mailOptions);
-    } catch (error) {
-      throw error;
-    }
+    return await this.transporter.sendMail(mailOptions);
   }
 }
