@@ -1,5 +1,5 @@
 import { Category } from '@prisma/client';
-import { IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsPositive, IsString , IsOptional , IsDate } from 'class-validator';
 
 export class ItemCreateDto {
   @IsString()
@@ -53,4 +53,16 @@ export class ItemCreateDto {
 
   @IsNumber()
   rating: number;
+
+  @IsDate()
+  @IsOptional()
+  demandweek: Date;
+
+  @IsNumber()
+  @IsOptional()
+  demand: number;
+
+  @IsNumber()
+  @IsOptional()
+  demandCounter: number;
 }

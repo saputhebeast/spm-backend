@@ -17,6 +17,7 @@ import { SubscriptionBoxModule } from './subscription-box/subscription-box.modul
 import { ItemsOnSubscriptionBoxesModule } from './items-on-subscription-boxes/items-on-subscription-boxes.module';
 import { ReviewModule } from 'src/review/review.mdoule';
 import { FeedbackModule } from './feedback/feedback.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { FeedbackModule } from './feedback/feedback.module';
       load: [EnvironmentConfiguration],
       validationSchema,
     }),
+    EmailModule,
     AuthModule,
     UserModule,
     PrismaModule,

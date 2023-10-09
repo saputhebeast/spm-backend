@@ -106,9 +106,8 @@ export class ItemService {
         `getAllAvailableItems: execution started by user- ${userId}`,
       );
 
-      const dbItems: { items: ItemResponseDto[] } = await this.getAllItems(
-        userId,
-      );
+      const dbItems: { items: ItemResponseDto[] } =
+        await this.getAllItems(userId);
       const recItems: AxiosResponse<any> = await axios.get(
         'https://spm-recommendation-api-ebb89176d9c0.herokuapp.com/recommend',
         { data: itemRequestDto },
