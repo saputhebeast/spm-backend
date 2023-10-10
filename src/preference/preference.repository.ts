@@ -8,13 +8,7 @@ export class PreferenceRepository {
 
   async savePreference(userId: number, dto: PreferenceDto) {
     return this.prisma.preference.create({
-      data: {
-        userId: dto.userId,
-        material: dto.material,
-        brand: dto.brand,
-        type: dto.type,
-        color: dto.color,
-      },
+      data: { ...dto, userId },
       include: {
         user: true,
       },
