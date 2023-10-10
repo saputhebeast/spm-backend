@@ -7,7 +7,6 @@ import {
 import { ItemRepository } from './item.repository';
 import { mapItemToItemSellerResponseDto } from '../common/mapper';
 import {
-  ItemAvailableRequestDto,
   ItemCreateDto,
   ItemEditDto,
   ItemRecommendationDto,
@@ -87,8 +86,9 @@ export class ItemService {
 
     await this.getItem(userId, itemId);
 
-    const deletedItem: ItemSellerDto =
-      await this.itemRepository.deleteItem(itemId);
+    const deletedItem: ItemSellerDto = await this.itemRepository.deleteItem(
+      itemId,
+    );
 
     if (!deletedItem) {
       throw new InternalServerErrorException('Unable to delete the item');
@@ -99,7 +99,7 @@ export class ItemService {
 
   async getAllAvailableItems(
     userId: number,
-    itemRequestDto: ItemAvailableRequestDto,
+    customerId: number,
   ): Promise<ItemRecommendationDto[]> {
     try {
       this.logger.log(
@@ -109,6 +109,16 @@ export class ItemService {
       const dbItems: { items: ItemResponseDto[] } = await this.getAllItems(
         userId,
       );
+
+      // TODO: get below items using  customer id
+      const itemRequestDto = {
+        Brand: 'Adidas',
+        Type: 'Running',
+        Gender: 'Men',
+        Color: 'White',
+        Material: 'Mesh',
+      };
+
       const recItems: AxiosResponse<any> = await axios.get(
         'https://spm-recommendation-api-ebb89176d9c0.herokuapp.com/recommend',
         { data: itemRequestDto },
