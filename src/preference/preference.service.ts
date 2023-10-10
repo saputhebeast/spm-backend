@@ -11,7 +11,7 @@ import {
   PreferenceDto,
   PreferenceResponseDto,
 } from './dto';
-import { Preference, User } from '@prisma/client';
+import { Preference } from '@prisma/client';
 import {
   PreferenceToPreferenceResponseDtoMapper,
   PreferenceCreateDtoToPreferenceDtoMapper,
@@ -43,7 +43,7 @@ export class PreferenceService {
       throw new InternalServerErrorException('Preference not created');
     }
 
-    return this.mapPreferenceToResponseDto(preference, preference.user);
+    return this.mapPreferenceToResponseDto(preference);
   }
 
   async updatePreference(
@@ -68,7 +68,7 @@ export class PreferenceService {
       throw new InternalServerErrorException('Preference not updated');
     }
 
-    return this.mapPreferenceToResponseDto(preference, preference.user);
+    return this.mapPreferenceToResponseDto(preference);
   }
 
   async getPreferenceByUserId(currentUser: number, userId: number) {
@@ -82,7 +82,7 @@ export class PreferenceService {
       throw new NotFoundException('No Preference for user found');
     }
 
-    return this.mapPreferenceToResponseDto(preference, preference.user);
+    return this.mapPreferenceToResponseDto(preference);
   }
 
   async getPreferenceById(currentUser: number, preferenceId: number) {
@@ -98,14 +98,13 @@ export class PreferenceService {
       );
     }
 
-    return this.mapPreferenceToResponseDto(preference, preference.user);
+    return this.mapPreferenceToResponseDto(preference);
   }
 
   private mapPreferenceToResponseDto(
     preference: Preference,
-    user: User,
   ): PreferenceResponseDto {
-    return PreferenceToPreferenceResponseDtoMapper(preference, user);
+    return PreferenceToPreferenceResponseDtoMapper(preference);
   }
 
   private mapPreferenceArraysToString(

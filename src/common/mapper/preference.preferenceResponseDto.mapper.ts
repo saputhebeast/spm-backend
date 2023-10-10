@@ -1,9 +1,8 @@
-import { Preference, User } from '@prisma/client';
+import { Preference } from '@prisma/client';
 import { PreferenceResponseDto } from '../../preference/dto';
 
 export function PreferenceToPreferenceResponseDtoMapper(
   preference: Preference,
-  user: User,
 ): PreferenceResponseDto {
   const response = new PreferenceResponseDto();
 
@@ -13,8 +12,6 @@ export function PreferenceToPreferenceResponseDtoMapper(
   response.type = preference.type.split(',');
   response.material = preference.material.split(',');
 
-  response.user.id = user.id;
-  response.user.email = user.email;
-  response.user.isActive = user.isActive;
+  response.user.id = preference.userId;
   return response;
 }
