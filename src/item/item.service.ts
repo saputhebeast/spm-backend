@@ -127,7 +127,7 @@ export class ItemService {
 
       for (const item of dbItems.items) {
         const isRecommended = recItems.data.recommendations.some(
-          (recItem) => recItem.Model === item.itemName,
+          (recItem) => recItem.Brand.toLowerCase() === item.brand.toLowerCase(),
         );
         const itemWithRecommendation: ItemRecommendationDto = {
           ...item,
