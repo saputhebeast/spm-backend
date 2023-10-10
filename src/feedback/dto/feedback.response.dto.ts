@@ -1,5 +1,14 @@
+import { Review } from '@prisma/client';
+
 export class FeedbackResponseDto {
   id: number;
+  result: string | null;
+  isSubscriptionCancelled: boolean;
+  description: string;
+  isSubmitted: boolean;
+  outcome: string | null;
+  createdAt: Date;
+  updatedAt: Date;
   user: {
     id: number;
     firstName: string;
@@ -8,21 +17,9 @@ export class FeedbackResponseDto {
   };
   subscriptionBox: {
     id: number;
-    items: [
-      {
-        id: number;
-        itemName: string;
-        price: string;
-        category: string;
-      },
-    ];
     total: number;
     createdAt: Date;
     updatedAt: Date;
   };
-  review: {
-    id: number;
-    rating: number;
-    description: string;
-  };
+  review: Review[];
 }

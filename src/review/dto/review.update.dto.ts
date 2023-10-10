@@ -1,15 +1,13 @@
-import { IsBoolean, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsBoolean, IsNotEmpty } from 'class-validator';
 
 export class ReviewUpdateDto {
-  @IsNotEmpty()
-  @IsNumber()
-  id: number;
-
   @IsBoolean()
-  isActive = false;
-
+  isActive: boolean;
+  @IsNotEmpty()
   isDiscarded?: boolean;
   isPositive?: boolean;
   sentiment?: string;
   opinion?: string;
+  @IsNotEmpty()
+  description: string;
 }

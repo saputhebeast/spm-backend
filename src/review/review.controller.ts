@@ -55,9 +55,9 @@ export class ReviewController {
     @Body() updateDto: ReviewUpdateDto,
     @Res() res: Response,
   ) {
-    updateDto.id = reviewId;
     const data: Review = await this.reviewService.updateReview(
       userId,
+      reviewId,
       updateDto,
     );
     return makeResponse({
@@ -149,6 +149,21 @@ export class ReviewController {
       status: HttpStatus.OK,
       data,
       message: 'Reviews Retrieved successfully',
+    });
+  }
+
+  @Post(':reviewId')
+  async analyseReview(
+    @Param('reviewId', ParseIntPipe) reviewId: number,
+    @Res() res: Response,
+  ) {
+    const data = await this.reviewService.analyse(reviewId);
+
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data: data,
+      message: 'Reviews Analysed successfully',
     });
   }
 }

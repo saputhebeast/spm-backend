@@ -8,6 +8,7 @@ import {
 import { ReviewRepository } from './review.repository';
 import { ReviewCreateDto, ReviewUpdateDto } from './dto';
 import { Review } from '@prisma/client';
+import { analyse } from './review.analyses.service';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class ReviewService {
@@ -26,13 +27,21 @@ export class ReviewService {
     return review;
   }
 
-  async updateReview(userId: number, reviewUpdateDto: ReviewUpdateDto) {
+  async updateReview(
+    userId: number,
+    reviewId: number,
+    reviewUpdateDto: ReviewUpdateDto,
+  ) {
     this.logger.log(`updateReview: execution started by user- ${userId}`);
 
-    await this.getReviewById(userId, reviewUpdateDto.id);
+    const review: Review = await this.getReviewById(userId, reviewId);
+    reviewUpdateDto.isActive =
+      review.isActive == true ? true : reviewUpdateDto.isActive;
 
-    const updatedReview: Review =
-      await this.reviewRepository.updateReview(reviewUpdateDto);
+    const updatedReview: Review = await this.reviewRepository.updateReview(
+      reviewId,
+      reviewUpdateDto,
+    );
 
     if (!updatedReview) {
       throw new InternalServerErrorException('Failed to update the review');
@@ -42,7 +51,7 @@ export class ReviewService {
   }
 
   async deleteReview(userId: number, reviewId: number) {
-    this.logger.log(`deletePackage: execution started by user- ${userId}`);
+    this.logger.log(`deleteReview: execution started by user- ${userId}`);
 
     await this.getReviewById(userId, reviewId);
 
@@ -96,5 +105,11 @@ export class ReviewService {
       throw new NotFoundException('No Review found');
     }
     return reviews;
+  }
+
+  async analyse(reviewId: number) {
+    const review: Review = await this.reviewRepository.getReviewById(reviewId);
+
+    return await analyse(review.description);
   }
 }
