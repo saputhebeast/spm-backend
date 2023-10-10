@@ -26,6 +26,6 @@ export function mapItemToItemSellerResponseDto(
     demandCounter: item.demandCounter,
     demand: item.demand,
     color: item.color,
-    rating: item.rating
+    rating: item.rating,
   };
 }

@@ -1,5 +1,5 @@
 import { Category } from '@prisma/client';
-import { IsNumber, IsOptional, IsString , IsDate} from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsDate } from 'class-validator';
 
 export class ItemEditDto {
   @IsString()
