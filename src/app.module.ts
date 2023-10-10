@@ -17,6 +17,7 @@ import { SubscriptionBoxModule } from './subscription-box/subscription-box.modul
 import { ItemsOnSubscriptionBoxesModule } from './items-on-subscription-boxes/items-on-subscription-boxes.module';
 import { ReviewModule } from 'src/review/review.mdoule';
 import { FeedbackModule } from './feedback/feedback.module';
+import { PreferenceModule } from './preference/preference.module';
 import { EmailModule } from './email/email.module';
 
 @Module({
@@ -42,6 +43,7 @@ import { EmailModule } from './email/email.module';
     ItemsOnSubscriptionBoxesModule,
     ReviewModule,
     FeedbackModule,
+    PreferenceModule,
   ],
 })
 export class AppModule implements NestModule {
