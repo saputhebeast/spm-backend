@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
-  Param,
+  Param, ParseIntPipe,
   Patch,
   Post,
   Res,
@@ -20,11 +20,11 @@ import { PreferenceCreateUpdateDto, PreferenceResponseDto } from './dto';
 export class PreferenceController {
   constructor(private preferenceService: PreferenceService) {}
 
-  @Post('/userId')
+  @Post('/:userId')
   @UseGuards(SuperAdminGuard)
   async createPreference(
     @GetUser('id') currentUser: number,
-    @Param('userId') userId: number,
+    @Param('userId', ParseIntPipe) userId: number,
     @Body() preferenceCreateDto: PreferenceCreateUpdateDto,
     @Res() res: Response,
   ): Promise<void> {
@@ -43,11 +43,11 @@ export class PreferenceController {
     });
   }
 
-  @Patch('/userId')
+  @Patch('/:userId')
   @UseGuards(SuperAdminGuard)
   async updatePreference(
     @GetUser('id') currentUser: number,
-    @Param('userId') userId: number,
+    @Param('userId', ParseIntPipe) userId: number,
     @Body() preferenceUpdateDto: PreferenceCreateUpdateDto,
     @Res() res: Response,
   ): Promise<void> {
@@ -66,11 +66,11 @@ export class PreferenceController {
     });
   }
 
-  @Get('/userId')
+  @Get('user/:userId')
   @UseGuards(SuperAdminGuard)
   async getPreferenceByUserId(
     @GetUser('id') currentUser: number,
-    @Param('userId') userId: number,
+    @Param('userId', ParseIntPipe) userId: number,
     @Res() res: Response,
   ): Promise<void> {
     const data: PreferenceResponseDto =
@@ -84,11 +84,11 @@ export class PreferenceController {
     });
   }
 
-  @Get('/id')
+  @Get('/:id')
   @UseGuards(UserGuard)
   async getPreferenceById(
     @GetUser('id') currentUser: number,
-    @Param('id') preferenceId: number,
+    @Param('id', ParseIntPipe) preferenceId: number,
     @Res() res: Response,
   ): Promise<void> {
     const data: PreferenceResponseDto =

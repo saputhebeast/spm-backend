@@ -12,6 +12,6 @@ export function PreferenceToPreferenceResponseDtoMapper(
   response.type = preference.type.split(',');
   response.material = preference.material.split(',');
 
-  response.user.id = preference.userId;
+  response.userId = preference.userId;
   return response;
 }
