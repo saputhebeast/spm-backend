@@ -17,5 +17,8 @@ export class ItemSellerDto {
   material: string;
   tags: string;
   color: string;
+  demandweek: Date;
+  demand: number;
+  demandCounter: number;
   rating: number;
 }
