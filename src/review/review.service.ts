@@ -9,8 +9,6 @@ import { ReviewRepository } from './review.repository';
 import { ReviewCreateDto, ReviewUpdateDto } from './dto';
 import { Review } from '@prisma/client';
 import { analyse } from './review.analyses.service';
-import { FeedbackRepository } from 'src/feedback/feedback.repository';
-import { SubscriptionBoxRepository } from 'src/subscription-box/subscription-box.repository';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class ReviewService {
