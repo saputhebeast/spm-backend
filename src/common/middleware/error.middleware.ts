@@ -9,7 +9,7 @@ export class ErrorMiddleware implements NestMiddleware {
     res.on('finish', () => {
       if (res.statusCode >= 400) {
         this.logger.error(
-          `Error occurred: ${res.statusCode} ${res.statusMessage}`,
+          `Error occurred: ${req.path} ${res.statusCode} ${res.statusMessage}`,
         );
       }
     });

@@ -12,5 +12,6 @@ export class ReviewCreateDto {
   @IsNumber()
   itemId: number;
 
-  feedbackId?: number;
+  @IsNumber()
+  feedbackId: number;
 }
