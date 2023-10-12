@@ -68,4 +68,8 @@ export class ItemEditDto {
   @IsNumber()
   @IsOptional()
   demandCounter: number;
+
+  @IsOptional()
+  @IsString()
+  imageUrl: string;
 }

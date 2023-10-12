@@ -65,15 +65,15 @@ export class ItemController {
     });
   }
 
-  @Get('available/items')
+  @Get('available/items/:id')
   async getAllAvailableItems(
     @GetUser('id') userId: number,
-    @Body() itemRequestDto: ItemAvailableRequestDto,
+    @Param('id', ParseIntPipe) customerId: number,
     @Res() res: Response,
   ): Promise<void> {
     const data = await this.itemService.getAllAvailableItems(
       userId,
-      itemRequestDto,
+      customerId,
     );
     return makeResponse({
       res,
