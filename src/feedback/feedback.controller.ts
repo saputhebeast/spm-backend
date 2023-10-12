@@ -136,7 +136,7 @@ export class FeedbackController {
     });
   }
 
-  @Get(':boxId')
+  @Get('box/:boxId')
   @UseGuards(UserGuard)
   async getFeedbackBySubscriptionBoxId(
     @GetUser('id') userId: number,
