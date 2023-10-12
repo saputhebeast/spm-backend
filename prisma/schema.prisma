@@ -82,6 +82,7 @@ model Item {
   material String
   tags     String
   color    String
+  imageUrl String @default("https://my-se-bucket-12.s3.ap-south-1.amazonaws.com/1697081389343-e60a3c36-7449-4b67-a441-275cc34f3e13.png")
   demand   Int  @default(1)
   demandCounter   Int  @default(1)
   demandweek DateTime @default(now())
