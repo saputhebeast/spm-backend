@@ -19,6 +19,7 @@ export class ReviewRepository {
       include: {
         feedback: true,
         item: true,
+        user: true,
       },
     });
   }
