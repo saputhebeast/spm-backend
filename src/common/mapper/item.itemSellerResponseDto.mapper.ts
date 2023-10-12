@@ -27,6 +27,6 @@ export function mapItemToItemSellerResponseDto(
     demand: item.demand,
     color: item.color,
     rating: item.rating,
-    imageUrl: item.imageUrl
+    imageUrl: item.imageUrl,
   };
 }

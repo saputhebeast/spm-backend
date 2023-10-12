@@ -20,7 +20,7 @@ export class ItemRecommendationDto {
   tags: string;
   color: string;
   rating: number;
-  imageUrl: string ;
+  imageUrl: string;
   isActive: boolean;
   isRecommend: boolean;
 }
