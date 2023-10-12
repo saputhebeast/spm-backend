@@ -12,7 +12,5 @@ export class ReviewCreateDto {
   @IsNumber()
   itemId: number;
 
-  @IsNotEmpty()
-  @IsNumber()
-  feedbackId: number;
+  feedbackId?: number;
 }

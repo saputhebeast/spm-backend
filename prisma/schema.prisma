@@ -24,6 +24,7 @@ model User {
   shippingDetails   ShippingDetails?
   subscriptionBoxes SubscriptionBox[]
   preference        Preference?
+  reviews           Review[]
 
   @@map("user")
 }
@@ -233,6 +234,9 @@ model Review {
   sentiment         String?
   opinion           String?
   isActive          Boolean
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
   feedBackId Int
   feedback   Feedback @relation(fields: [feedBackId], references: [id])

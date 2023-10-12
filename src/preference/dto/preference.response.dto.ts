@@ -4,6 +4,7 @@ export class PreferenceResponseDto {
   color: string[];
   type: string[];
   material: string[];
+  userId: number;
   user: {
     id: number;
     email: string;

@@ -6,9 +6,10 @@ import { ReviewCreateDto, ReviewUpdateDto } from './dto';
 export class ReviewRepository {
   constructor(private prisma: PrismaService) {}
 
-  async saveReview(dto: ReviewCreateDto) {
+  async saveReview(userId: number, dto: ReviewCreateDto) {
     return this.prisma.review.create({
       data: {
+        userId: userId,
         itemId: dto.itemId,
         feedBackId: dto.feedbackId,
         rating: dto.rating,
@@ -38,24 +39,24 @@ export class ReviewRepository {
     });
   }
 
-  // async deleteReviewById(reviewId: number) {
-  //   return this.prisma.review.delete({
-  //     where: {
-  //       id: reviewId,
-  //     },
-  //   });
-  // }
-
   async deleteReviewById(reviewId: number) {
-    return this.prisma.review.update({
+    return this.prisma.review.delete({
       where: {
         id: reviewId,
       },
-      data: {
-        isActive: false,
-      },
     });
   }
+
+  // async deleteReviewById(reviewId: number) {
+  //   return this.prisma.review.update({
+  //     where: {
+  //       id: reviewId,
+  //     },
+  //     data: {
+  //       isActive: false,
+  //     },
+  //   });
+  // }
 
   async getReviewById(reviewId: number) {
     return this.prisma.review.findUnique({
@@ -80,6 +81,29 @@ export class ReviewRepository {
     return this.prisma.review.findMany({
       where: {
         itemId: itemId,
+      },
+      include: {
+        item: true,
+      },
+    });
+  }
+
+  async getReviewsByItemIdOfCurrentUser(userId: number, itemId: number) {
+    return this.prisma.review.findFirst({
+      where: {
+        itemId: itemId,
+        userId: userId,
+      },
+      include: {
+        item: true,
+      },
+    });
+  }
+
+  async getReviewsOfCurrentUser(userId: number) {
+    return this.prisma.review.findMany({
+      where: {
+        userId: userId,
       },
       include: {
         item: true,

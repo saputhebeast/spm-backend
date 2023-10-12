@@ -19,8 +19,10 @@ export class ReviewService {
   async saveReview(userId: number, reviewCreateDto: ReviewCreateDto) {
     this.logger.log(`createReview: execution started by user- ${userId}`);
 
-    const review: Review =
-      await this.reviewRepository.saveReview(reviewCreateDto);
+    const review: Review = await this.reviewRepository.saveReview(
+      userId,
+      reviewCreateDto,
+    );
     if (!review) {
       throw new InternalServerErrorException('Review not saved');
     }
@@ -107,9 +109,42 @@ export class ReviewService {
     return reviews;
   }
 
+  async getReviewsByItemIdOfCurrentUser(userId: number, itemId: number) {
+    this.logger.log(
+      `getReviewsByItemIdOfCurrentUser: execution started by user- ${userId}`,
+    );
+
+    const reviews: Review =
+      await this.reviewRepository.getReviewsByItemIdOfCurrentUser(
+        userId,
+        itemId,
+      );
+    if (!reviews) {
+      throw new NotFoundException('No Review found');
+    }
+
+    return reviews;
+  }
+
+  async getReviewsOfCurrentUser(userId: number) {
+    this.logger.log(
+      `getReviewsOfCurrentUser: execution started by user- ${userId}`,
+    );
+
+    const reviews: Review[] =
+      await this.reviewRepository.getReviewsOfCurrentUser(userId);
+    if (!reviews) {
+      throw new NotFoundException('No Review found');
+    }
+
+    return reviews;
+  }
+
   async analyse(reviewId: number) {
     const review: Review = await this.reviewRepository.getReviewById(reviewId);
+    const result = await analyse(review.description);
+    console.log(result);
 
-    return await analyse(review.description);
+    return result;
   }
 }

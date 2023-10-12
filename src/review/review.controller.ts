@@ -98,7 +98,22 @@ export class ReviewController {
     });
   }
 
-  @Get(':reviewId')
+  @Get('/my')
+  async getReviewsOfCurrentUser(
+    @GetUser('id') userId: number,
+    @Res() res: Response,
+  ) {
+    const data: Review[] =
+      await this.reviewService.getReviewsOfCurrentUser(userId);
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Reviews Retrieved successfully',
+    });
+  }
+
+  @Get('/:reviewId')
   async getReviewByReviewId(
     @GetUser('id') userId: number,
     @Param('reviewId', ParseIntPipe) reviewId: number,
@@ -116,7 +131,7 @@ export class ReviewController {
     });
   }
 
-  @Get(':itemId')
+  @Get('/item/:itemId')
   async getReviewsByItemId(
     @GetUser('id') userId: number,
     @Param('itemId', ParseIntPipe) itemId: number,
@@ -134,7 +149,23 @@ export class ReviewController {
     });
   }
 
-  @Get(':feedbackId')
+  @Get('/item/:itemId/my')
+  async getReviewsByItemIdOfCurrentUser(
+    @GetUser('id') userId: number,
+    @Param('itemId', ParseIntPipe) itemId: number,
+    @Res() res: Response,
+  ) {
+    const data: Review =
+      await this.reviewService.getReviewsByItemIdOfCurrentUser(userId, itemId);
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Reviews Retrieved successfully',
+    });
+  }
+
+  @Get('feedback/:feedbackId')
   async getReviewsByFeedbackId(
     @GetUser('id') userId: number,
     @Param('feedbackId', ParseIntPipe) feedbackId: number,
@@ -152,7 +183,7 @@ export class ReviewController {
     });
   }
 
-  @Post(':reviewId')
+  @Post('analyse/:reviewId')
   async analyseReview(
     @Param('reviewId', ParseIntPipe) reviewId: number,
     @Res() res: Response,
