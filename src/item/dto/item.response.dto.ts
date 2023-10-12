@@ -23,5 +23,6 @@ export class ItemResponseDto {
   demandweek: Date;
   demand: number;
   demandCounter: number;
+  imageUrl: string ;
   isActive: boolean;
 }

@@ -20,5 +20,6 @@ export class ItemSellerDto {
   demandweek: Date;
   demand: number;
   demandCounter: number;
+  imageUrl: string ;
   rating: number;
 }

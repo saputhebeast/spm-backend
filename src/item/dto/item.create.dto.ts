@@ -72,4 +72,9 @@ export class ItemCreateDto {
   @IsNumber()
   @IsOptional()
   demandCounter: number;
+
+  @IsOptional()
+  @IsString()
+  imageUrl: string;
+
 }
