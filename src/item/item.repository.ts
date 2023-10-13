@@ -29,6 +29,15 @@ export class ItemRepository {
     });
   }
 
+  async getItemById(itemId: number) {
+    return this.prisma.item.findFirst({
+      where: {
+        id: itemId,
+        isActive: true,
+      },
+    });
+  }
+
   async getAllItems(): Promise<ItemSellerDto[]> {
     return this.prisma.item.findMany({
       where: {

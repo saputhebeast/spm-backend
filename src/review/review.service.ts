@@ -7,14 +7,21 @@ import {
 } from '@nestjs/common';
 import { ReviewRepository } from './review.repository';
 import { ReviewCreateDto, ReviewUpdateDto } from './dto';
-import { Review } from '@prisma/client';
+import { Item, Preference, Review } from '@prisma/client';
 import { analyse } from './review.analyses.service';
+import { PreferenceRepository } from '../preference/preference.repository';
+import { ItemRepository } from '../item/item.repository';
+import { PreferenceCreateDtoToPreferenceDtoMapper } from '../common/mapper';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class ReviewService {
   private readonly logger: Logger = new Logger(ReviewService.name);
 
-  constructor(private reviewRepository: ReviewRepository) {}
+  constructor(
+    private reviewRepository: ReviewRepository,
+    private preferenceRepository: PreferenceRepository,
+    private itemRepository: ItemRepository,
+  ) {}
 
   async saveReview(userId: number, reviewCreateDto: ReviewCreateDto) {
     this.logger.log(`createReview: execution started by user- ${userId}`);
@@ -151,11 +158,45 @@ export class ReviewService {
     return reviews;
   }
 
-  async analyse(reviewId: number) {
+  async analyse(userId: number, reviewId: number) {
     const review: Review = await this.reviewRepository.getReviewById(reviewId);
-    const result = await analyse(review.description);
-    console.log(result);
+    if (!review) {
+      throw new NotFoundException('Review not found to analyse.');
+    }
+    const item: Item = await this.itemRepository.getItemById(review.itemId);
 
-    return result;
+    const preference: Preference =
+      await this.preferenceRepository.getPreferenceByUserId(userId);
+    if (!preference) {
+      throw new NotFoundException('Preferences not set yet to analyse.');
+    }
+    const result = await analyse(preference, review, item);
+    if (result !== null) {
+      const reviewToUpdate = result.review;
+      reviewToUpdate.isActive = true;
+      reviewToUpdate.isDiscarded = false;
+      const preferenceToUpdate = result.updatePreference;
+
+      console.log(reviewToUpdate);
+      console.log(preferenceToUpdate);
+
+      const updatedReview: Review = await this.updateReview(
+        userId,
+        reviewId,
+        reviewToUpdate,
+      );
+      const updatedPreference: Preference =
+        await this.preferenceRepository.updatePreference(
+          userId,
+          PreferenceCreateDtoToPreferenceDtoMapper(userId, preferenceToUpdate),
+        );
+      console.log('updatedReview');
+      console.log(updatedReview);
+      console.log('updatedPreference');
+      console.log(updatedPreference);
+      return updatedReview;
+    } else {
+      throw new NotFoundException('Failed to analyse review');
+    }
   }
 }
