@@ -103,8 +103,9 @@ export class ReviewController {
     @GetUser('id') userId: number,
     @Res() res: Response,
   ) {
-    const data: Review[] =
-      await this.reviewService.getReviewsOfCurrentUser(userId);
+    const data: Review[] = await this.reviewService.getReviewsOfCurrentUser(
+      userId,
+    );
     return makeResponse({
       res,
       status: HttpStatus.OK,
