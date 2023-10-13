@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@aws-sdk/client-s3':
     specifier: ^3.382.0
@@ -11,9 +7,6 @@ dependencies:
   '@aws-sdk/s3-request-presigner':
     specifier: ^3.382.0
     version: 3.382.0
-  '@azure/ai-language-text':
-    specifier: ^1.1.0
-    version: 1.1.0
   '@azure/ai-text-analytics':
     specifier: ^5.1.0
     version: 5.1.0
@@ -831,22 +824,6 @@ packages:
     engines: {node: '>=12.0.0'}
     dependencies:
       tslib: 2.6.2
-    dev: false
-
-  /@azure/ai-language-text@1.1.0:
-    resolution: {integrity: sha512-WAAQJrh7EbYgK+gvqn1nTaqYbonHVxdACse3ud3nd/kCLUl3hK6l3vpkEIJped0YffGH4HlTOUIsuIhZei92Ng==}
-    engines: {node: '>=14.0.0'}
-    dependencies:
-      '@azure/core-auth': 1.5.0
-      '@azure/core-client': 1.7.3
-      '@azure/core-lro': 2.5.4
-      '@azure/core-paging': 1.5.0
-      '@azure/core-rest-pipeline': 1.12.1
-      '@azure/core-tracing': 1.0.1
-      '@azure/logger': 1.0.4
-      tslib: 2.6.2
-    transitivePeerDependencies:
-      - supports-color
     dev: false
 
   /@azure/ai-text-analytics@5.1.0:
@@ -7111,3 +7088,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
