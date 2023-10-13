@@ -21,18 +21,15 @@ import { PreferenceCreateUpdateDto, PreferenceResponseDto } from './dto';
 export class PreferenceController {
   constructor(private preferenceService: PreferenceService) {}
 
-  @Post('/:userId')
-  @UseGuards(SuperAdminGuard)
+  @Post()
   async createPreference(
     @GetUser('id') currentUser: number,
-    @Param('userId', ParseIntPipe) userId: number,
     @Body() preferenceCreateDto: PreferenceCreateUpdateDto,
     @Res() res: Response,
   ): Promise<void> {
     const data: PreferenceResponseDto =
       await this.preferenceService.createPreference(
         currentUser,
-        userId,
         preferenceCreateDto,
       );
 

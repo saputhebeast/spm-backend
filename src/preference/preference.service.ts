@@ -25,19 +25,21 @@ export class PreferenceService {
 
   async createPreference(
     currentUser: number,
-    userId: number,
     preferenceCreateDto: PreferenceCreateUpdateDto,
   ): Promise<PreferenceResponseDto> {
     this.logger.log(
       `createPreference: execution started by user- ${currentUser}`,
     );
     const preferenceDto: PreferenceDto = this.mapPreferenceArraysToString(
-      userId,
+      currentUser,
       preferenceCreateDto,
     );
 
     const preference: Preference =
-      await this.preferenceRepository.savePreference(userId, preferenceDto);
+      await this.preferenceRepository.savePreference(
+        currentUser,
+        preferenceDto,
+      );
 
     if (!preference) {
       throw new InternalServerErrorException('Preference not created');
