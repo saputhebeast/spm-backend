@@ -103,6 +103,20 @@ export class PreferenceService {
     return this.mapPreferenceToResponseDto(preference);
   }
 
+  async getPreferenceByCurrentUser(currentUser: number) {
+    this.logger.log(
+      `getPreferenceByCurrentUser: execution started by user- ${currentUser}`,
+    );
+
+    const preference: Preference =
+      await this.preferenceRepository.getPreferenceByUserId(currentUser);
+    if (!preference) {
+      throw new NotFoundException(`No Preference with ${currentUser} id found`);
+    }
+
+    return this.mapPreferenceToResponseDto(preference);
+  }
+
   private mapPreferenceToResponseDto(
     preference: Preference,
   ): PreferenceResponseDto {

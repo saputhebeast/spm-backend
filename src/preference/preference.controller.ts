@@ -41,6 +41,25 @@ export class PreferenceController {
     });
   }
 
+  @Get('current')
+  @UseGuards(UserGuard)
+  async getPreferenceByCurrentUser(
+    @GetUser('id') currentUser: number,
+    @Res() res: Response,
+  ): Promise<void> {
+    console.log('called');
+    const data = await this.preferenceService.getPreferenceByCurrentUser(
+      currentUser,
+    );
+
+    return makeResponse({
+      res,
+      status: HttpStatus.OK,
+      data,
+      message: 'Preference found for id',
+    });
+  }
+
   @Patch('/:userId')
   @UseGuards(SuperAdminGuard)
   async updatePreference(
