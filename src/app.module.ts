@@ -15,7 +15,7 @@ import { PaymentModule } from './payment/payment.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { SubscriptionBoxModule } from './subscription-box/subscription-box.module';
 import { ItemsOnSubscriptionBoxesModule } from './items-on-subscription-boxes/items-on-subscription-boxes.module';
-import { ReviewModule } from 'src/review/review.mdoule';
+import { ReviewModule } from 'src/review/review.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { PreferenceModule } from './preference/preference.module';
 import { EmailModule } from './email/email.module';
