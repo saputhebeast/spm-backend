@@ -90,9 +90,8 @@ export class ItemService {
 
     await this.getItem(userId, itemId);
 
-    const deletedItem: ItemSellerDto = await this.itemRepository.deleteItem(
-      itemId,
-    );
+    const deletedItem: ItemSellerDto =
+      await this.itemRepository.deleteItem(itemId);
 
     if (!deletedItem) {
       throw new InternalServerErrorException('Unable to delete the item');
@@ -110,13 +109,11 @@ export class ItemService {
         `getAllAvailableItems: execution started by user- ${userId}`,
       );
 
-      const dbItems: { items: ItemResponseDto[] } = await this.getAllItems(
-        userId,
-      );
+      const dbItems: { items: ItemResponseDto[] } =
+        await this.getAllItems(userId);
 
-      const preferences = await this.preferenceRepository.getPreferenceByUserId(
-        customerId,
-      );
+      const preferences =
+        await this.preferenceRepository.getPreferenceByUserId(customerId);
 
       let itemRequestDto: {
         Brand: string;
