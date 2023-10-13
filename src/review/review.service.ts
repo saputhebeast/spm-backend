@@ -73,8 +73,9 @@ export class ReviewService {
 
     await this.getReviewById(userId, reviewId);
 
-    const reviewToDelete: Review =
-      await this.reviewRepository.deleteReviewById(reviewId);
+    const reviewToDelete: Review = await this.reviewRepository.deleteReviewById(
+      reviewId,
+    );
     if (!reviewToDelete) {
       throw new InternalServerErrorException('Failed to delete the review');
     }
@@ -117,8 +118,9 @@ export class ReviewService {
   async getReviewsByItemId(userId: number, itemId: number) {
     this.logger.log(`getReviewsByItemId: execution started by user- ${userId}`);
 
-    const reviews: Review[] =
-      await this.reviewRepository.getReviewsByItemId(itemId);
+    const reviews: Review[] = await this.reviewRepository.getReviewsByItemId(
+      itemId,
+    );
     if (!reviews) {
       throw new NotFoundException('No Review found');
     }
@@ -175,23 +177,15 @@ export class ReviewService {
       reviewToUpdate.isDiscarded = false;
       const preferenceToUpdate = result.updatePreference;
 
-      console.log(reviewToUpdate);
-      console.log(preferenceToUpdate);
-
       const updatedReview: Review = await this.updateReview(
         userId,
         reviewId,
         reviewToUpdate,
       );
-      const updatedPreference: Preference =
-        await this.preferenceRepository.updatePreference(
-          userId,
-          PreferenceCreateDtoToPreferenceDtoMapper(userId, preferenceToUpdate),
-        );
-      console.log('updatedReview');
-      console.log(updatedReview);
-      console.log('updatedPreference');
-      console.log(updatedPreference);
+      await this.preferenceRepository.updatePreference(
+        userId,
+        PreferenceCreateDtoToPreferenceDtoMapper(userId, preferenceToUpdate),
+      );
       return updatedReview;
     } else {
       throw new NotFoundException('Failed to analyse review');
