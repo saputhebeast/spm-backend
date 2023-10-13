@@ -19,6 +19,7 @@ import { ReviewModule } from 'src/review/review.mdoule';
 import { FeedbackModule } from './feedback/feedback.module';
 import { PreferenceModule } from './preference/preference.module';
 import { EmailModule } from './email/email.module';
+import { ShippingDetailsModule } from './shipping-details/shipping-details.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { EmailModule } from './email/email.module';
     ReviewModule,
     FeedbackModule,
     PreferenceModule,
+    ShippingDetailsModule,
   ],
 })
 export class AppModule implements NestModule {
