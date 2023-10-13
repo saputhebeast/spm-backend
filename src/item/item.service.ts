@@ -14,12 +14,16 @@ import {
   ItemSellerDto,
 } from './dto';
 import axios, { AxiosResponse } from 'axios';
+import { PreferenceRepository } from '../preference/preference.repository';
 
 @Injectable()
 export class ItemService {
   private readonly logger: Logger = new Logger(ItemService.name);
 
-  constructor(private itemRepository: ItemRepository) {}
+  constructor(
+    private itemRepository: ItemRepository,
+    private preferenceRepository: PreferenceRepository,
+  ) {}
 
   async createItem(
     userId: number,
@@ -108,14 +112,55 @@ export class ItemService {
       const dbItems: { items: ItemResponseDto[] } =
         await this.getAllItems(userId);
 
-      // TODO: get below items using  customer id
-      const itemRequestDto = {
-        Brand: 'Adidas',
-        Type: 'Running',
-        Gender: 'Men',
-        Color: 'White',
-        Material: 'Mesh',
+      const preferences =
+        await this.preferenceRepository.getPreferenceByUserId(customerId);
+
+      let itemRequestDto: {
+        Brand: string;
+        Type: string;
+        Gender?: string;
+        Color: string;
+        Material: string;
+        Size?: string;
       };
+      if (preferences === null) {
+        itemRequestDto = {
+          Brand: 'Adidas',
+          Type: 'Running',
+          Gender: 'Men',
+          Color: 'White',
+          Material: 'Mesh',
+        };
+      } else {
+        // Split the preference strings into arrays
+        const brands = preferences.brand.split(',');
+        const types = preferences.type.split(',');
+        const gender = 'Men,Female'.split(',');
+        const colors = preferences.color.split(',');
+        const materials = preferences.material.split(',');
+
+        // Create a random selection function
+        function getRandomValue(arr) {
+          const randomIndex = Math.floor(Math.random() * arr.length);
+          return arr[randomIndex];
+        }
+
+        // Build the itemRequestDto using random values
+        itemRequestDto = {
+          Brand: capitalizeFirstLetter(getRandomValue(brands)),
+          Type: capitalizeFirstLetter(getRandomValue(types)),
+          Gender: capitalizeFirstLetter(getRandomValue(gender)),
+          Color: capitalizeFirstLetter(getRandomValue(colors)),
+          Material: capitalizeFirstLetter(getRandomValue(materials)),
+        };
+
+        // Function to capitalize the first letter of a string
+        function capitalizeFirstLetter(str) {
+          return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+      }
+
+      console.log(itemRequestDto);
 
       const recItems: AxiosResponse<any> = await axios.get(
         'https://spm-recommendation-api-ebb89176d9c0.herokuapp.com/recommend',
