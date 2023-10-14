@@ -160,8 +160,6 @@ export class ItemService {
         }
       }
 
-      console.log(itemRequestDto);
-
       const recItems: AxiosResponse<any> = await axios.get(
         'https://spm-recommendation-api-ebb89176d9c0.herokuapp.com/recommend',
         { data: itemRequestDto },
