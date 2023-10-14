@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `item` MODIFY `demand` INTEGER NOT NULL DEFAULT 1;

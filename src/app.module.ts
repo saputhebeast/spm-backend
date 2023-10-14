@@ -13,6 +13,13 @@ import { SellerModule } from './seller/seller.module';
 import { ItemModule } from './item/item.module';
 import { PaymentModule } from './payment/payment.module';
 import { SubscriptionModule } from './subscription/subscription.module';
+import { SubscriptionBoxModule } from './subscription-box/subscription-box.module';
+import { ItemsOnSubscriptionBoxesModule } from './items-on-subscription-boxes/items-on-subscription-boxes.module';
+import { ReviewModule } from 'src/review/review.module';
+import { FeedbackModule } from './feedback/feedback.module';
+import { PreferenceModule } from './preference/preference.module';
+import { EmailModule } from './email/email.module';
+import { ShippingDetailsModule } from './shipping-details/shipping-details.module';
 
 @Module({
   imports: [
@@ -22,6 +29,7 @@ import { SubscriptionModule } from './subscription/subscription.module';
       load: [EnvironmentConfiguration],
       validationSchema,
     }),
+    EmailModule,
     AuthModule,
     UserModule,
     PrismaModule,
@@ -32,6 +40,12 @@ import { SubscriptionModule } from './subscription/subscription.module';
     ItemModule,
     PaymentModule,
     SubscriptionModule,
+    SubscriptionBoxModule,
+    ItemsOnSubscriptionBoxesModule,
+    ReviewModule,
+    FeedbackModule,
+    PreferenceModule,
+    ShippingDetailsModule,
   ],
 })
 export class AppModule implements NestModule {

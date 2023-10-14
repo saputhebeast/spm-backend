@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -131,6 +132,25 @@ export class SubscriptionController {
         subscriptionId,
         updateDto,
       );
+    return makeResponse({
+      res,
+      status: HttpStatus.CREATED,
+      data,
+      message: 'Subscription status updated successfully',
+    });
+  }
+
+  @Delete('id')
+  @UseGuards(ManagerSuperAdminGuard)
+  async deleteSubscription(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) subscriptionId: number,
+    @Res() res: Response,
+  ): Promise<void> {
+    const data: void = await this.subscriptionService.deleteSubscription(
+      userId,
+      subscriptionId,
+    );
     return makeResponse({
       res,
       status: HttpStatus.CREATED,

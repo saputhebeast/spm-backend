@@ -29,6 +29,15 @@ export class ItemRepository {
     });
   }
 
+  async getItemById(itemId: number) {
+    return this.prisma.item.findFirst({
+      where: {
+        id: itemId,
+        isActive: true,
+      },
+    });
+  }
+
   async getAllItems(): Promise<ItemSellerDto[]> {
     return this.prisma.item.findMany({
       where: {
@@ -67,6 +76,27 @@ export class ItemRepository {
       },
       include: {
         seller: true,
+      },
+    });
+  }
+
+  async findManyItems(items: number[]) {
+    return this.prisma.item.findMany({
+      where: {
+        id: {
+          in: items,
+        },
+      },
+    });
+  }
+
+  async updateItemQuantity(id: number, quantity: number) {
+    await this.prisma.item.update({
+      where: {
+        id: id,
+      },
+      data: {
+        quantity: quantity,
       },
     });
   }

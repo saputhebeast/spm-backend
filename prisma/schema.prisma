@@ -19,8 +19,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  payments      Payment[]
-  subscriptions Subscription[]
+  payments          Payment[]
+  subscriptions     Subscription[]
+  shippingDetails   ShippingDetails?
+  subscriptionBoxes SubscriptionBox[]
+  preference        Preference?
+  reviews           Review[]
 
   @@map("user")
 }
@@ -52,6 +56,8 @@ model Seller {
   postalCode String
   state      String
   country    String
+  slat       Float
+  slong      Float
   isActive   Boolean @default(true)
 
   createAt  DateTime @default(now())
@@ -63,27 +69,35 @@ model Seller {
 }
 
 model Item {
-  id       Int      @id @default(autoincrement())
-  itemName String
-  price    Float
-  category Category
-  quantity Int
-  isActive Boolean  @default(true)
-  brand    String
-  outdoor  String
-  gender   String
-  age      Int
-  size     String
-  material String
-  tags     String
-  color    String
-  rating   Int
+  id            Int      @id @default(autoincrement())
+  itemName      String
+  price         Float
+  category      Category
+  quantity      Int
+  isActive      Boolean  @default(true)
+  brand         String
+  outdoor       String
+  gender        String
+  age           Int
+  size          String
+  material      String
+  tags          String
+  color         String
+  imageUrl      String   @default("https://my-se-bucket-12.s3.ap-south-1.amazonaws.com/1697081389343-e60a3c36-7449-4b67-a441-275cc34f3e13.png")
+  demand        Int      @default(1)
+  demandCounter Int      @default(1)
+  demandweek    DateTime @default(now())
+  rating        Int
 
   createAt  DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   sellerId Int
-  seller   Seller @relation(fields: [sellerId], references: [id])
+  seller   Seller   @relation(fields: [sellerId], references: [id])
+  Review   Review[]
+
+  subscriptionBox          SubscriptionBox[]
+  ItemsOnSubscriptionBoxes ItemsOnSubscriptionBoxes[]
 
   @@map("item")
 }
@@ -109,6 +123,7 @@ model Subscription {
   startDate DateTime
   endDate   DateTime
   status    SubscriptionStatus
+  isActive  Boolean            @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -121,6 +136,52 @@ model Subscription {
   package   Package @relation(fields: [packageId], references: [id])
 
   @@map("subscription")
+}
+
+model ShippingDetails {
+  id         Int     @id @default(autoincrement())
+  lane1      String?
+  lane2      String?
+  city       String
+  state      String?
+  country    String
+  postalCode String
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("shipping_details")
+}
+
+model SubscriptionBox {
+  id    Int   @id @default(autoincrement())
+  total Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items Item[]
+
+  userId                   Int
+  user                     User                       @relation(fields: [userId], references: [id])
+  ItemsOnSubscriptionBoxes ItemsOnSubscriptionBoxes[]
+  feedback                 Feedback?
+
+  @@map("subscription_box")
+}
+
+model ItemsOnSubscriptionBoxes {
+  itemId Int
+  item   Item @relation(fields: [itemId], references: [id])
+
+  subscriptionBoxId Int
+  subscription_box  SubscriptionBox @relation(fields: [subscriptionBoxId], references: [id])
+
+  @@id([itemId, subscriptionBoxId])
+  @@map("item_subscription_box")
 }
 
 enum Role {
@@ -142,4 +203,67 @@ enum PaymentStatus {
 enum SubscriptionStatus {
   ACTIVE
   INACTIVE
+  COMPLETED
+}
+
+model Feedback {
+  id                      Int     @id @default(autoincrement())
+  result                  String?
+  isSubscriptionCancelled Boolean @default(false)
+  description             String
+  isSubmitted             Boolean @default(false)
+  outcome                 String?
+  isActive                Boolean @default(true)
+
+  reviews Review[]
+
+  subscriptionBoxId Int             @unique
+  subscriptionBox   SubscriptionBox @relation(fields: [subscriptionBoxId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("feedback")
+}
+
+model Review {
+  id                Int      @id @default(autoincrement())
+  rating            Int
+  description       String
+  isReviewDiscarded Boolean  @default(false)
+  isPositive        Boolean?
+  sentiment         String?
+  opinion           String?
+  isActive          Boolean
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  feedBackId Int
+  feedback   Feedback @relation(fields: [feedBackId], references: [id])
+
+  itemId Int
+  item   Item @relation(fields: [itemId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("review")
+}
+
+model Preference {
+  id       Int    @id @default(autoincrement())
+  brand    String
+  color    String
+  size     String
+  material String
+  type     String
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("preference")
 }

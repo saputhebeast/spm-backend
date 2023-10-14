@@ -22,7 +22,11 @@ export function mapItemToItemSellerResponseDto(
     size: item.size,
     material: item.material,
     tags: item.tags,
+    demandweek: item.demandweek,
+    demandCounter: item.demandCounter,
+    demand: item.demand,
     color: item.color,
     rating: item.rating,
+    imageUrl: item.imageUrl,
   };
 }

@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class SellerEditDto {
   @IsString()
@@ -29,6 +29,12 @@ export class SellerEditDto {
   @IsString()
   @IsOptional()
   state?: string;
+
+  @IsNumber()
+  slat: number;
+
+  @IsNumber()
+  slong: number;
 
   @IsString()
   @IsOptional()
